@@ -9,9 +9,16 @@
 <div class="prize-tab-outer mb-2">
 	<div
 		class="prize-tab {isHighlighted ? 'prize-highlighted text-black' : 'bg-primary-2 text-white'} 
-        flex flex-row text-2xl font-normal-regular py-1 px-10"
+        flex flex-row items-center text-2xl font-normal-regular py-1 px-20 sm:px-10"
 	>
-		<div class="mr-3 w-[40px]">{number}</div>
+		<div class="flex items-center mr-3">
+            <div class="w-[35px]">{number}</div> 
+            <div class="w-[15px]">
+                {#if (price === 1000 || price === 32000 || price === 1000000)}
+                    <i class="fa-solid fa-diamond text-xs text-white"></i>
+                {/if}
+            </div>
+        </div>
 		<div class="flex-1">{formatCurrency(price)}</div>
 	</div>
 </div>

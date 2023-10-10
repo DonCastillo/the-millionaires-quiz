@@ -11,8 +11,7 @@
         }
     });
 
-    console.log("MoneyTree.svelte: ", moneyTree.reverse());
-
+    moneyTree.reverse();
 </script>
 
 <div class="bg-primary-2">
