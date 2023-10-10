@@ -1,18 +1,17 @@
-export enum MoneyTree {
-    QUESTION_1 = 100,
-    QUESTION_2 = 200,
-    QUESTION_3 = 300,
-    QUESTION_4 = 500,
-    QUESTION_5 = 1000,
-    QUESTION_6 = 2000,
-    QUESTION_7 = 4000,
-    QUESTION_8 = 8000,
-    QUESTION_9 = 16000,
-    QUESTION_10 = 32000,
-    QUESTION_11 = 64000,
-    QUESTION_12 = 125000,
-    QUESTION_13 = 250000,
-    QUESTION_14 = 500000,
-    QUESTION_15 = 1000000
-};
-}
+export const MoneyTree = [
+    100,
+    200,
+    300,
+    500,
+    1000,
+    2000,
+    4000,
+    8000,
+    16000,
+    32000,
+    64000,
+    125000,
+    250000,
+    500000,
+    1000000
+];

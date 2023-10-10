@@ -26,8 +26,10 @@
 :root {
 	--color-primary-1: #5F449E;
 	--color-primary-2: #13106D;
-	--color-secondary-1: #EDBF37;
-	--color-secondary-2: #E18C1D;
+	--color-selected-1: #EDBF37;
+	--color-selected-2: #E18C1D;
+	--color-correct-1: #51941E;
+	--color-correct-2: #25693E;
 	--font-heading-regular: 'Copperplate Gothic Regular', sans-serif;
 	--font-heading-bold: 'Copperplate Gothic Bold', sans-serif;
 	--font-normal-regular: 'Conduit ITC Regular', sans-serif;
@@ -51,6 +53,24 @@
 	font-family: var(--font-normal-bold);
 }
 
+.color-primary-1 {
+	color: var(--color-primary-1);
+}
+
+.color-primary-2 {
+	color: var(--color-primary-2);
+}
+
+.bg-primary-1 {
+	background-color: var(--color-primary-1);
+}
+
+.bg-primary-2 {
+	background-color: var(--color-primary-2);
+}
+
+
+
 html, body {
 	overflow-x: hidden;
 }
@@ -61,6 +81,11 @@ body {
 	min-height: 100vh;
 	margin: 0;
 	background-attachment: fixed;
+}
+
+.prize-highlighted {
+	background: var(--color-selected-1);
+	background: radial-gradient(circle, var(--color-selected-1) 0%, var(--color-selected-2) 35%);
 }
 
 h1 {
