@@ -7,7 +7,7 @@
         return {
             number: index + 1,
             price: value,
-            isHighlighted: value <= $USER_CASH_PRIZE
+            isHighlighted: value == $USER_CASH_PRIZE
         }
     });
 

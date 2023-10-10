@@ -69,6 +69,21 @@
 	background-color: var(--color-primary-2);
 }
 
+.color-selected-1 {
+	color: var(--color-selected-1);
+}
+
+.color-selected-2 {
+	color: var(--color-selected-2);
+}
+
+.bg-selected-1 {
+	background-color: var(--color-selected-1);
+}
+
+.bg-selected-2 {
+	background-color: var(--color-selected-2);
+}
 
 
 html, body {
@@ -83,9 +98,10 @@ body {
 	background-attachment: fixed;
 }
 
-.prize-highlighted {
+.prize-highlighted, .selected-item {
 	background: var(--color-selected-1);
 	background: radial-gradient(circle, var(--color-selected-1) 0%, var(--color-selected-2) 35%);
+	color: #000;
 }
 
 h1 {

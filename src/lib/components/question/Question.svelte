@@ -1,8 +1,16 @@
 <script lang="ts">
 	import Option from "./Option.svelte";
+    import {createEventDispatcher} from "svelte";
+    const dispatch = createEventDispatcher();
+    
 
 	export let question: string = "";
 	export let options: any[] = [];
+    let optionSelected: string | null = null;
+    $: correctAnswer = options.find((option) => option.isCorrect).label;
+    $: correctAnswer === optionSelected ? dispatch("correct") : dispatch("incorrect");
+    $: console.log("correctAnswer:", correctAnswer);
+    $: console.log("optionSelecitoed:", optionSelected);
     const letters = ["A", "B", "C", "D"];
 </script>
 
@@ -18,7 +26,7 @@
 </div>
 <div>
     { #each options as option, index }
-        <Option optionLetter={letters[index]} optionText={option.label} isOptionCorrect={option.isCorrect}/>
+        <Option optionLetter={letters[index]} optionText={option.label} isOptionCorrect={option.isCorrect} bind:optionSelected={optionSelected}/>
     { /each }
 </div>
 

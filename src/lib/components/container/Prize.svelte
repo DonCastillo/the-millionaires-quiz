@@ -8,7 +8,7 @@
 
 <div class="prize-tab-outer mb-2">
 	<div
-		class="prize-tab {isHighlighted ? 'prize-highlighted text-black' : 'bg-primary-2 text-white'} 
+		class="prize-tab {isHighlighted ? 'prize-highlighted' : 'bg-primary-2 text-white'} 
         flex flex-row items-center text-2xl font-normal-regular py-1 px-20 sm:px-10"
 	>
 		<div class="flex items-center mr-3">
