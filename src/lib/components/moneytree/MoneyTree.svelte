@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { MoneyTree } from "$lib/constants/money-tree.constants";
-    import { USER_CASH_PRIZE } from "$lib/store/main";
+    import { user_cash_prize } from "$lib/store/main";
 	import Prize from "$lib/components/container/Prize.svelte";
 
     const moneyTree = MoneyTree.map((value, index) => {
         return {
             number: index + 1,
             price: value,
-            isHighlighted: value == $USER_CASH_PRIZE
+            isHighlighted: value == $user_cash_prize
         }
     });
 

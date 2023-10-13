@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatCurrency } from "$lib/utils/format";
+	import { formatCurrency } from "$lib/utils/utils";
 
 	export let number: number = 1;
 	export let price: number = 0;

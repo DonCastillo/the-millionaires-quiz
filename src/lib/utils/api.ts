@@ -1,7 +1,9 @@
-import { CategoryName } from "$lib/constants/category.constants";
-import { getCategoryIcon, stringToCategoryName } from "./type";
+import type { CategoryName } from "$lib/constants/category.constants";
+import type { Difficulty } from "$lib/constants/difficulty.constants";
+import { getCategoryIcon, getDifficultyLevel, stringToCategoryName } from "./type";
 import { error } from "@sveltejs/kit";
 import axios from "axios";
+import { shuffleArray } from "./utils";
 
 const BASE_ENDPOINT = "https://opentdb.com/";
 
@@ -46,7 +48,6 @@ export const getCategories = async (token: string) => {
                 if(response.data.trivia_categories.length === 0) throw new Error();
                 const categories = response.data.trivia_categories.map((category: any) => {
                     const categoryName = stringToCategoryName(category.name);
-                    console.log("category name: ", categoryName);
                     return {
                         name: categoryName,
                         icon: getCategoryIcon(categoryName),
@@ -57,4 +58,28 @@ export const getCategories = async (token: string) => {
             .catch((error) => reject(new Error("Cannot retrieve categories.")))
 
     });
+}
+
+/** Retrieve a random list of questions */
+export const getQuestions = async (token: string, amount: number, difficulty: Difficulty) => {
+    return new Promise(async (resolve, reject) => {
+        console.log("retrieving questions ...");
+        await axios.get(`${BASE_ENDPOINT}/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple&token=${token}`)
+            .then((response) => {
+                if(response.status !== 200) throw new Error();
+                if(response.data.response_code !== 0) throw new Error();
+                if(response.data.results.length === 0) throw new Error();
+                const questions = response.data.results.map((question: any) => {
+                    return {
+                        category: stringToCategoryName(question.category),
+                        difficulty: getDifficultyLevel(question.difficulty),
+                        question: question.question,
+                        choices: shuffleArray([...question.incorrect_answers, question.correct_answer]),
+                        correct_answer: question.correct_answer,
+                    }
+                });
+                resolve(questions);
+            })
+            .catch((error) => reject(new Error("Cannot retrieve questions.")))
+    })
 }
