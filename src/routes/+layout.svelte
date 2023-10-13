@@ -5,7 +5,7 @@
 </script>
 
 <div class="app">
-	<header class="p-3 bg-orange-300">
+	<header class="p-3 text-white">
 		<h1>The Millionnaire's Quiz</h1>
 	</header>
 	<nav class="text-white py-3 text-2xl font-heading-bold">
