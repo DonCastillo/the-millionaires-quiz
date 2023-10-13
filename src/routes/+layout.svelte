@@ -1,12 +1,20 @@
-<script>
+<script lang="ts">
 	import "./styles.css";
+	import { page } from "$app/stores";
+	console.log("page", $page);
 </script>
 
 <div class="app">
-	<header class="p-3">
+	<header class="p-3 bg-orange-300">
 		<h1>The Millionnaire's Quiz</h1>
-        <!-- <i class="fa-ancient-greece"></i> -->
 	</header>
+	<nav class="text-white py-3 text-2xl font-heading-bold">
+		<ul class="flex flex-row flex-nowrap justify-center items-center gap-12">
+			<li><a href="/" aria-current={$page.url.pathname === '/'}>Home</a></li>
+			<li><a href="/scoreboard" aria-current={$page.url.pathname === '/scoreboard'}>Scoreboard</a></li>
+			<li><a href="/about" aria-current={$page.url.pathname === '/about'}>About</a></li>
+		</ul>
+	</nav>
 	<main id="main-wrapper" class="flex flex-col justify-center items-center">
 		<slot />
 	</main>

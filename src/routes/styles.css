@@ -104,6 +104,10 @@ body {
 	color: #000;
 }
 
+nav [aria-current="true"] {
+	color: var(--color-selected-1)
+}
+
 h1 {
 	font-family: var(--font-heading-bold);
 }
