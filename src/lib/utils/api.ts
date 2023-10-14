@@ -4,6 +4,8 @@ import { getCategoryIcon, getDifficultyLevel, stringToCategoryName } from "./typ
 import { error } from "@sveltejs/kit";
 import axios from "axios";
 import { shuffleArray } from "./utils";
+import type QuestionInterface from "$lib/interfaces/question.interface";
+import type CategoryInterface from "$lib/interfaces/category.interface";
 
 const BASE_ENDPOINT = "https://opentdb.com/";
 
@@ -11,7 +13,7 @@ const BASE_ENDPOINT = "https://opentdb.com/";
  * Returns a unique token to ensure quiz questions returned are not duplicated
  */
 export const getToken = async () => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise<string>(async (resolve, reject) => {
         console.log("getting token ...");
         await axios.get(`${BASE_ENDPOINT}/api_token.php?command=request`)
             .then((response) => {
@@ -26,7 +28,7 @@ export const getToken = async () => {
 
 /** Deletes the token. Called after the game is over */
 export const deleteToken = async (token: string) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise<boolean>(async (resolve, reject) => {
         console.log("deleting token ...");
         await axios.get(`${BASE_ENDPOINT}/api_token.php?command=reset&token=${token}`)
             .then((response) => {
@@ -40,7 +42,7 @@ export const deleteToken = async (token: string) => {
 
 /** Returns a complete list of question categories */
 export const getCategories = async (token: string) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise<CategoryInterface[]>(async (resolve, reject) => {
         console.log("retrieving categories ...");
         await axios.get(`${BASE_ENDPOINT}/api_category.php?token=${token}`)
             .then((response) => {
@@ -62,7 +64,7 @@ export const getCategories = async (token: string) => {
 
 /** Retrieve a random list of questions */
 export const getQuestions = async (token: string, amount: number, difficulty: Difficulty) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise<QuestionInterface[]>(async (resolve, reject) => {
         console.log("retrieving questions ...");
         await axios.get(`${BASE_ENDPOINT}/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple&token=${token}`)
             .then((response) => {
