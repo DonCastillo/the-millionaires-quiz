@@ -1,9 +1,11 @@
 <script lang="ts">
-	import { MoneyTree } from "$lib/constants/money-tree.constants";
     import { user_cash_prize } from "$lib/store/main";
 	import Prize from "$lib/components/container/Prize.svelte";
+	import type MoneyTreeInterface from "$lib/interfaces/moneytree.interface";
+    export let moneyPrizes: number[] = [];
 
-    const moneyTree = MoneyTree.map((value, index) => {
+   
+    let moneyTree: MoneyTreeInterface[] = moneyPrizes.map((value, index) => {
         return {
             number: index + 1,
             price: value,

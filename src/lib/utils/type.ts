@@ -1,5 +1,6 @@
 import { CategoryName } from "$lib/constants/category.constants";
 import { Difficulty } from "$lib/constants/difficulty.constants";
+import { Mode } from "$lib/constants/mode.constants";
 
 const stringToCategoryName = (str: string): CategoryName => {
     switch(str) {
@@ -61,6 +62,14 @@ const getCategoryIcon = (categoryName: CategoryName): string => {
     }
 }
 
+const stringToMode = (str: string): Mode => {
+    switch(str) {
+        case 'normal': return Mode.NORMAL;
+        case 'piglatin': return Mode.PIGLATIN;
+        default: return Mode.NORMAL;
+    }
+}
+
 const getDifficultyLevel = (str: string): Difficulty => {
     switch(str) {
         case 'easy': return Difficulty.EASY;
@@ -69,4 +78,4 @@ const getDifficultyLevel = (str: string): Difficulty => {
         default: return Difficulty.EASY;
     }
 }
-export {stringToCategoryName, getCategoryIcon, getDifficultyLevel};
+export {stringToCategoryName, getCategoryIcon, stringToMode, getDifficultyLevel};

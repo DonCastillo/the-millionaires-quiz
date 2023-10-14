@@ -27,9 +27,10 @@ export const getToken = async () => {
 }
 
 /** Deletes the token. Called after the game is over */
-export const deleteToken = async (token: string) => {
+export const deleteToken = async (token: string | null) => {
     return new Promise<boolean>(async (resolve, reject) => {
         console.log("deleting token ...");
+        if(!token) reject(new Error("Invalid token"));
         await axios.get(`${BASE_ENDPOINT}/api_token.php?command=reset&token=${token}`)
             .then((response) => {
                 if(response.status !== 200) throw new Error();
@@ -41,9 +42,10 @@ export const deleteToken = async (token: string) => {
 }
 
 /** Returns a complete list of question categories */
-export const getCategories = async (token: string) => {
+export const getCategories = async (token: string | null) => {
     return new Promise<CategoryInterface[]>(async (resolve, reject) => {
         console.log("retrieving categories ...");
+        if(!token) reject(new Error("Invalid token"));
         await axios.get(`${BASE_ENDPOINT}/api_category.php?token=${token}`)
             .then((response) => {
                 if(response.status !== 200) throw new Error();
@@ -63,9 +65,10 @@ export const getCategories = async (token: string) => {
 }
 
 /** Retrieve a random list of questions */
-export const getQuestions = async (token: string, amount: number, difficulty: Difficulty) => {
+export const getQuestions = async (token: string | null, amount: number, difficulty: Difficulty) => {
     return new Promise<QuestionInterface[]>(async (resolve, reject) => {
         console.log("retrieving questions ...");
+        if(!token) reject(new Error("Invalid token"));
         await axios.get(`${BASE_ENDPOINT}/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple&token=${token}`)
             .then((response) => {
                 if(response.status !== 200) throw new Error();

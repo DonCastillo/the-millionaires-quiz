@@ -14,7 +14,7 @@
 		<div class="flex items-center mr-3">
             <div class="w-[35px]">{number}</div> 
             <div class="w-[15px]">
-                {#if (price === 1000 || price === 32000 || price === 1000000)}
+                {#if number % 5 == 0}
                     <i class="fa-solid fa-diamond text-xs text-white"></i>
                 {/if}
             </div>

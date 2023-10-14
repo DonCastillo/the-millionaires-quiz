@@ -3,7 +3,7 @@
 	import Button from "$lib/components/container/Button.svelte";
 	import Hexagon from "$lib/components/container/Hexagon.svelte";
 	import { Mode } from "$lib/constants/mode.constants";
-	import { access_token } from "$lib/store/main";
+	import { user_name } from "$lib/store/main";
 
 	console.log("This is the home page");
 	const TEXTFIELD_NAME = "Enter your name here";
@@ -17,7 +17,7 @@
 	$: piglatinHeading = chosenMode === Mode.PIGLATIN ? 'color-primary-2' : 'color-selected-1';
 
 	const clickHandler = () => {
-		$access_token = userName;
+		$user_name = userName;
 		goto(`/game/${chosenMode}`);
 	};
 
