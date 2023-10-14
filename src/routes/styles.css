@@ -98,10 +98,27 @@ body {
 	background-attachment: fixed;
 }
 
-.prize-highlighted, .selected-item {
+.prize-highlighted, .selected-item, .yellow-highlight {
 	background: var(--color-selected-1);
 	background: radial-gradient(circle, var(--color-selected-1) 0%, var(--color-selected-2) 35%);
-	color: #000;
+	color: var(--color-primary-2);
+}
+
+.green-highlight {
+	background: var(--color-correct-1);
+	background: radial-gradient(circle, var(--color-correct-1) 0%, var(--color-correct-2) 35%);
+	color: "#fff";
+}
+
+.violet-highlight {
+	background: var(--color-primary-1);
+	background: radial-gradient(circle, var(--color-primary-1) 0%, var(--color-primary-2) 35%);
+	color: "#fff";
+}
+
+.black-highlight {
+	background: rgb(0, 0, 0);
+	background: linear-gradient(0deg,rgba(0, 0, 0, 1) 53%,rgba(67, 67, 67, 1) 100%);
 }
 
 nav [aria-current="true"] {
