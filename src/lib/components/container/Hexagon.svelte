@@ -1,5 +1,6 @@
 <script lang="ts">
 	export let style: string = "";
+	export let disabled: boolean = false;
 	console.log(style);
 </script>
 
@@ -7,6 +8,7 @@
 	<div class="hexagon-outer w-full">
 		<button
 			class="hexagon-inner text-2xl leading-7  text-white font-normal-regular px-16 py-5 sm:px-20 sm:py-10 {style}"
+			disabled={disabled}
 			on:mousedown
 			on:mouseup
 			on:mouseenter

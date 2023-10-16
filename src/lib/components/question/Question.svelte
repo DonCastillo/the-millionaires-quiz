@@ -1,52 +1,103 @@
 <script lang="ts">
+	import { user_cash_prize } from '$lib/store/main';
+	import { money_prices } from '$lib/store/main';
+	import type QuestionInterface from "$lib/interfaces/question.interface";
+	import Button from "../container/Button.svelte";
+	import Hexagon from "../container/Hexagon.svelte";
 	import Option from "./Option.svelte";
-    import {createEventDispatcher} from "svelte";
-    const dispatch = createEventDispatcher();
-    
+	import { createEventDispatcher } from "svelte";
+	const dispatch = createEventDispatcher();
+	const letters = ["A", "B", "C", "D"];
 
-	export let question: string = "";
-	export let options: any[] = [];
-    let optionSelected: string | null = null;
-    $: correctAnswer = options.find((option) => option.isCorrect).label;
-    $: correctAnswer === optionSelected ? dispatch("correct") : dispatch("incorrect");
-    $: console.log("correctAnswer:", correctAnswer);
-    $: console.log("optionSelecitoed:", optionSelected);
-    const letters = ["A", "B", "C", "D"];
+	export let questions: QuestionInterface[] = [];
+	let questionIndex: number = 0;
+	let optionSelected: string | null = null;
+    let revealAnswer: boolean = false;
+    let message: string = "";
+    let showProceedButton: boolean = false;
+    let disabledOptions: string[] = [];
+    let gameOver: boolean = false;
+
+	$: currentQuestion = questions[questionIndex % questions.length];
+    $: console.log("option selected----: ", optionSelected )
+    $: console.log("choices: ", currentQuestion.choices)
+	$: correctAnswer = currentQuestion.choices.find((choice) => choice.isCorrect)?.label;
+
+
+    const finalizeAnswer = () => {
+        console.log("option selected: ", optionSelected)
+        console.log("correct Ansert: ", correctAnswer)
+        showProceedButton = false;
+        message = "";
+        if(optionSelected === correctAnswer) {
+            // go to next question
+            // console.log($money_prices) 
+            dispatch("correct", { questionIndex })
+            message = "You are correct!";
+            showProceedButton = true;
+            optionSelected = null;
+        } else {
+            dispatch("incorrect")
+            message = "You are incorrect! The correct answer is: " + correctAnswer;
+        }
+        revealAnswer = true;
+        disabledAllOptions();
+    }
+
+    const nextQuestion = () => {
+        questionIndex++;
+        revealAnswer = false;
+        disabledOptions = [];
+        optionSelected = null;
+        showProceedButton = false;
+        message = "";
+    }
+
+    const endGame = () => {
+        console.log("endgame....")
+    }
+
+    const disabledAllOptions = () => {
+        disabledOptions = currentQuestion.choices.map((choice) => choice.label);
+    }
+
+    const disabledAnOption = (option: []) => {
+        disabledOptions = option;
+    }
 </script>
 
-<div class="question-container relative flex justify-center items-center mb-5 bg-pink-500">
-    <div class="question-outer">
-        <h2
-            id="question-label"
-            class="text-2xl leading-7 text-white font-normal-regular bg-primary-2 px-16 py-5 sm:px-20 sm:py-10"
-        >
-            {question}
-        </h2>
-    </div>
-</div>
+<h2>
+	<Hexagon style="w-full min-h-[150px] black-highlight cursor-default">
+        {@html currentQuestion?.question}
+    </Hexagon>
+</h2>
+
 <div>
-    { #each options as option, index }
-        <Option optionLetter={letters[index]} optionText={option.label} isOptionCorrect={option.isCorrect} bind:optionSelected={optionSelected}/>
-    { /each }
+	{#each currentQuestion.choices as option, index}
+		<Option
+			optionLetter={letters[index]}
+			optionText={option.label}
+            isSelected={optionSelected === option.label}
+            isAnswer={revealAnswer && (correctAnswer === option.label)}
+            disabled={disabledOptions.includes(option.label)}
+			bind:optionSelected
+		/>
+	{/each}
 </div>
 
+{#if message}
+    <div>
+        <h3 class="text-white text-center text-2xl font-heading-regular">{message}</h3>
+    </div>
+{/if}
 
+<div class="mt-10 px-10 flex flex-col sm:flex-row gap-3">
+    <Button buttonText="End game with <br>${$user_cash_prize}" style="text-xl" on:click={endGame} />
+    {#if optionSelected && !revealAnswer }
+        <Button buttonText="Is that your final answer?" style="text-xl" on:click={finalizeAnswer} />
+    {/if}
+    {#if showProceedButton}
+        <Button buttonText="Next Question" style="text-xl" on:click={nextQuestion} />
+    {/if}
 
-<style>
-	.question-outer {
-		clip-path: polygon(10% 0%, 90% 0, 95% 50%, 90% 100%, 10% 100%, 5% 50%);
-		background-color: white;
-	}
-	#question-label {
-		clip-path: polygon(10.79% 2.28%, 89.35% 2.66%, 93.85% 50%, 89.36% 97.45%, 10.65% 97.59%, 6.15% 50%);
-	}
-    .question-container::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        border-bottom: 6px solid white;
-        width: 100%;
-        height:50%;
-    }
-</style>
+</div>

@@ -75,12 +75,14 @@ export const getQuestions = async (token: string | null, amount: number, difficu
                 if(response.data.response_code !== 0) throw new Error();
                 if(response.data.results.length === 0) throw new Error();
                 const questions = response.data.results.map((question: any) => {
+
+                    const shuffledChoices = shuffleArray([...question.incorrect_answers, question.correct_answer]);
+                    const choices = shuffledChoices.map((choice: string) => { return { label: choice, isCorrect: choice === question.correct_answer } })
                     return {
                         category: stringToCategoryName(question.category),
                         difficulty: getDifficultyLevel(question.difficulty),
                         question: question.question,
-                        choices: shuffleArray([...question.incorrect_answers, question.correct_answer]),
-                        correct_answer: question.correct_answer,
+                        choices: choices,
                     }
                 });
                 resolve(questions);
