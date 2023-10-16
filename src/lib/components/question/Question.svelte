@@ -1,11 +1,13 @@
 <script lang="ts">
+	import { formatCurrency } from '$lib/utils/utils';
+	import { won_jackpot } from './../../store/main.ts';
 	import { user_cash_prize } from '$lib/store/main';
 	import { money_prices } from '$lib/store/main';
 	import type QuestionInterface from "$lib/interfaces/question.interface";
 	import Button from "../container/Button.svelte";
 	import Hexagon from "../container/Hexagon.svelte";
 	import Option from "./Option.svelte";
-	import { createEventDispatcher } from "svelte";
+	import { createEventDispatcher, onMount } from "svelte";
 	const dispatch = createEventDispatcher();
 	const letters = ["A", "B", "C", "D"];
 
@@ -22,6 +24,10 @@
     $: console.log("option selected----: ", optionSelected )
     $: console.log("choices: ", currentQuestion.choices)
 	$: correctAnswer = currentQuestion.choices.find((choice) => choice.isCorrect)?.label;
+
+    onMount(() => {
+        resetParameters();
+    })
 
 
     const finalizeAnswer = () => {
@@ -53,8 +59,8 @@
         message = "";
     }
 
-    const endGame = () => {
-        console.log("endgame....")
+    const claimPrize = () => {
+        dispatch("claimprize");
     }
 
     const disabledAllOptions = () => {
@@ -63,6 +69,16 @@
 
     const disabledAnOption = (option: []) => {
         disabledOptions = option;
+    }
+
+    const resetParameters = () => {
+        questionIndex = 0;
+        optionSelected = null;
+        revealAnswer = false;
+        message = "";
+        showProceedButton = false;
+        disabledOptions = [];
+        gameOver = false;
     }
 </script>
 
@@ -92,12 +108,20 @@
 {/if}
 
 <div class="mt-10 px-10 flex flex-col sm:flex-row gap-3">
-    <Button buttonText="End game with <br>${$user_cash_prize}" style="text-xl" on:click={endGame} />
-    {#if optionSelected && !revealAnswer }
-        <Button buttonText="Is that your final answer?" style="text-xl" on:click={finalizeAnswer} />
-    {/if}
-    {#if showProceedButton}
-        <Button buttonText="Next Question" style="text-xl" on:click={nextQuestion} />
-    {/if}
+    {#if !$won_jackpot}
 
+        <Button buttonText="End game with <br>{formatCurrency($user_cash_prize)}" style="text-xl" on:click={claimPrize} />
+        
+        {#if optionSelected && !revealAnswer }
+            <Button buttonText="Is that your final answer?" style="text-xl" on:click={finalizeAnswer} />
+        {/if}
+        {#if showProceedButton}
+            <Button buttonText="Next Question" style="text-xl" on:click={nextQuestion} />
+        {/if}
+
+    {:else}
+
+        <Button buttonText="Congratulations! You've won the jackpot prize of <br>{formatCurrency($user_cash_prize)}" style="text-xl" on:click={claimPrize} />
+
+    {/if}
 </div>

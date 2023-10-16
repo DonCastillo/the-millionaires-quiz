@@ -4,7 +4,7 @@
 	import MoneyTree from "$lib/components/moneytree/MoneyTree.svelte";
 	import Question from "$lib/components/question/Question.svelte";
 	import { onMount } from "svelte";
-	import { money_prices, access_token, user_cash_prize } from '$lib/store/main';
+	import { money_prices, access_token, user_cash_prize, number_of_questions, won_jackpot } from '$lib/store/main';
 	import { deleteToken, getQuestions, getToken } from "$lib/utils/api";
 	import { Difficulty } from "$lib/constants/difficulty.constants.js";
 	import { Mode } from "$lib/constants/mode.constants";
@@ -16,36 +16,65 @@
 	import type MoneyTreeInterface from "$lib/interfaces/moneytree.interface";
 	import type QuestionInterface from "$lib/interfaces/question.interface";
 	import { piglatin, piglatinizeQuestions } from "$lib/utils/piglatin";
+	import { goto } from "$app/navigation";
 
 	let questions: QuestionInterface[] = [];
+	$: numOfQuestionsPerDifficulty = $number_of_questions / 3;
 	$: mode = stringToMode(data?.mode);
 	$: $money_prices = mode === Mode.PIGLATIN ? MoneyTreePigLatin : MoneyTreeNormal;
 	$: questionsPromise = $access_token
 		? [
-				getQuestions($access_token, 5, Difficulty.EASY),
-				getQuestions($access_token, 5, Difficulty.MEDIUM),
-				getQuestions($access_token, 5, Difficulty.HARD),
+				getQuestions($access_token, numOfQuestionsPerDifficulty, Difficulty.EASY),
+				getQuestions($access_token, numOfQuestionsPerDifficulty, Difficulty.MEDIUM),
+				getQuestions($access_token, numOfQuestionsPerDifficulty, Difficulty.HARD),
 		  ]
 		: null;
 
-	// const questions =
-	// 	"lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptates lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptates lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptates ?";
-	// const options = [
-	// 	{ label: "Choice A", isCorrect: false },
-	// 	{ label: "Choice B lorem ipsum dolor sit amet consectetur adipisicing elit.", isCorrect: false },
-	// 	{ label: "Choice C", isCorrect: true },
-	// 	{ label: "Choice D", isCorrect: false },
-	// ];
+	
 	const correct = (data: any) => {
 		console.log("Correct");
 		console.log("money prices: ", $money_prices);
 		const questionIndex = data.detail.questionIndex;
 		const moneyEarned = $money_prices[questionIndex];
 		$user_cash_prize = moneyEarned;
+
+		// determine if the jackpot has been won
+		if(questionIndex === $number_of_questions - 1) {
+			$won_jackpot = true;
+		}
 	};
 	const incorrect = () => {
 		console.log("Incorrect");
+		// insert logic to look for safe heaven amounts
+		
 	};
+
+	const claimPrize = () => {
+		console.log("claiming prize ");
+		console.log("moneys: ", $money_prices)
+		let safeHavens = $money_prices.filter((price: number, index: number) => {
+			if((index + 1) % 5 === 0) {
+				return price;
+			}
+		});
+		safeHavens = [0, ...safeHavens];
+		safeHavens.reverse();
+		console.log("safeheavens: ", safeHavens)
+		const finalPrize = safeHavens.find((safeHaven: number) => safeHaven <= $user_cash_prize);
+		
+
+		console.log("user cash prize: ", $user_cash_prize);
+		console.log("final prize: ", finalPrize);
+		// safeHaven = [0, ...safeHaven];
+
+
+
+
+		// console.log("safe haven: ", safeHaven);
+		// save score to db
+		// goto("/scoreboard");
+
+	}
 
 	onMount(async () => {
 		// get token
@@ -54,19 +83,18 @@
 
 		// retrieve questions
 		if (questionsPromise) {
-			questions = await Promise.all(questionsPromise).then((results) => [
-				...results[0],
-				...results[1],
-				...results[2],
-			]);
+			questions = await Promise.all(questionsPromise)
+				.then((results) => [
+					...results[0],
+					...results[1],
+					...results[2],
+				]);
 		}
 
 		// piglatinize questions
 		if (mode === Mode.PIGLATIN) {
 			questions = piglatinizeQuestions(questions);
 		}
-
-		// console.log("questions: ", questions);
 
 		// delete token
 		await deleteToken($access_token);
@@ -81,6 +109,7 @@
 					questions={questions}
 					on:correct={correct}
 					on:incorrect={incorrect}
+					on:claimprize={claimPrize}
 				/>
 			{/if}
 			
