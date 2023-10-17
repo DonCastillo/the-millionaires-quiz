@@ -28,7 +28,7 @@ export const GET = async ({request, url}) => {
 		console.log("documents: ", documents)
 
 		return new Response(
-			JSON.stringify({ scores: documents }),
+			JSON.stringify({ data: documents }),
 			{ status: 200 }
 		);
 
@@ -65,7 +65,7 @@ export const POST = async ({request}) => {
 		console.log("documents: ", documents)
 
 		return new Response(
-			JSON.stringify({ scores: documents }),
+			JSON.stringify({ data: documents }),
 			{ status: 201 }
 		);
 
