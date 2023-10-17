@@ -23,7 +23,7 @@
 <style>
 	.hexagon-outer {
 		clip-path: polygon(10% 0%, 90% 0, 95% 50%, 90% 100%, 10% 100%, 5% 50%);
-		background-color: lightskyblue;
+		background-color: grey;
 	}
 	.hexagon-inner {
 		clip-path: polygon(
@@ -41,7 +41,7 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-		border-bottom: 6px solid white;
+		border-bottom: 3px solid grey;
 		width: 100%;
 		height: 50%;
 	}
