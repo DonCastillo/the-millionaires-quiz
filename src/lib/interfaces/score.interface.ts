@@ -1,4 +1,4 @@
-export interface ScoreInterface {
+export default interface ScoreInterface {
     _id?: string;
     username: string;
     prize: number;

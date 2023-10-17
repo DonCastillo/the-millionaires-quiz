@@ -48,10 +48,11 @@ export const POST = async ({request}) => {
 	console.log("Adding A Scores");
 	const body = await request.json();
 	const { username, prize } = body;
+	console.log("BODY: ", body)
 
 	if(!username) throw new Error("Name undefined.");
-	if(prize == undefined || prize == null || prize == "") throw new Error("Prize undefined.");
 	if(isNaN(prize)) throw new Error("Prize invalid.");
+	
 
 	try {
 		await client.connect();

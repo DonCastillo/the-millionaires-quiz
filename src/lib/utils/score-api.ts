@@ -1,4 +1,4 @@
-import { ScoreInterface } from "$lib/interfaces/score.interface";
+import type ScoreInterface from "$lib/interfaces/score.interface";
 import axios from "axios";
 
 const BASE_ENDPOINT = "/api/scores/";
