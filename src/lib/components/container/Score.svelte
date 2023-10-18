@@ -13,5 +13,5 @@
     {#if rank > 0}<div class="flex-none text-left w-[30px] color-selected-2">{rank}:</div>{/if}
     <div class="flex-1 text-left">{username}</div>
     <div class="flex-1 text-left">{formatCurrency(prize)}</div>
-    <div class="flex-1 text-center">{moment(date).format("MMM D, YYYY h:mm A")}</div>
+    <div class="flex-1 text-left sm:text-center">{moment(date).format("MMM D, YYYY h:mm A")}</div>
 </Hexagon>
