@@ -10,6 +10,7 @@
 	import Option from "./Option.svelte";
 	import { createEventDispatcher, onMount } from "svelte";
 	import Lifeline from '../container/Lifeline.svelte';
+	import { getLifeline } from '$lib/utils/type';
 	const dispatch = createEventDispatcher();
 	const letters = ["A", "B", "C", "D"];
 
@@ -85,16 +86,28 @@
         disabledOptions = [];
         gameOver = false;
     }
+
+    const useLifeline = (lifeline: LifelineName) => {
+        switch(lifeline) {
+            case LifelineName.FIFTY_FIFTY:
+                break;
+            case LifelineName.ASK_THE_AUDIENCE:
+                break;
+  
+            case LifelineName.SWITCH_QUESTION:
+                break;  
+        }
+        console.log("lifeline: ", getLifeline(lifeline));
+    }
 </script>
 
-<div class="flex flex-row mb-4">
-    <h2 class="text-left text-md font-heading-bold text-white mb-3 max-w-[300px] bg-pink-300">
-        <p>Contestant:</p>
-        <p>{$user_name}</p>
+<div class="flex flex-col sm:flex-row sm:items-center mb-4 px-10">
+    <h2 class="w-full sm:w-1/2 text-left text-md font-heading-bold text-white mb-3 sm:mb-0 w-fullmax-w-[300px]">
+        Contestant: {$user_name}
     </h2>
-    <div class="bg-orange-100 flex-1 flex flex-wrap justify-end gap-3">
+    <div class="w-full sm:w-1/2  flex flex-wrap justify-end gap-3">
         {#each lifelines as lifeline}
-            <Lifeline name={lifeline.name} icon={lifeline.icon} description={lifeline.description}/>
+            <Lifeline name={lifeline.name} icon={lifeline.icon} description={lifeline.description} on:use={useLifeline}/>
         {/each}
     </div>
 </div>

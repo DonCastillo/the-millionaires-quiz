@@ -1,5 +1,6 @@
 import { CategoryName } from "$lib/constants/category.constants";
 import { Difficulty } from "$lib/constants/difficulty.constants";
+import { LifelineName } from "$lib/constants/lifeline.constants";
 import { Mode } from "$lib/constants/mode.constants";
 
 const stringToCategoryName = (str: string): CategoryName => {
@@ -78,4 +79,13 @@ const getDifficultyLevel = (str: string): Difficulty => {
         default: return Difficulty.EASY;
     }
 }
-export {stringToCategoryName, getCategoryIcon, stringToMode, getDifficultyLevel};
+
+const getLifeline = (str: string) : LifelineName => {
+    switch(str) {
+        case 'fifty-fifty': return LifelineName.FIFTY_FIFTY;
+        case 'ask-the-audience': return LifelineName.ASK_THE_AUDIENCE;
+        case 'switch-question': return LifelineName.SWITCH_QUESTION;
+        default: return LifelineName.FIFTY_FIFTY;
+    }
+}
+export {stringToCategoryName, getCategoryIcon, stringToMode, getDifficultyLevel, getLifeline};
