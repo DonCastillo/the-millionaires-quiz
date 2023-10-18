@@ -23,16 +23,19 @@ export const GET = async ({ params }) => {
         const scoreId = params.scoreId;
         const query = { _id: new ObjectId(scoreId) };
         const document = await collection.findOne(query);
-
+		
 		return new Response(
-			JSON.stringify({ data: document }),
+			JSON.stringify({ data: document ? document : {} }),
 			{ status: 200 }
 		);
 
 	} catch(error: any) {
+		console.log("error: ", error.message)	
 		return new Response(
-			JSON.stringify({ error: error.message }),
-			{ status: 400 }
+			// JSON.stringify({ error: error.message }),
+			// { status: 400 }
+			JSON.stringify({ data: {} }),
+			{ status: 200 }
 		);
 	} finally {
 		await client.close();

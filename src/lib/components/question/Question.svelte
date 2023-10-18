@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { formatCurrency } from '$lib/utils/utils';
-	import { won_jackpot } from './../../store/main.ts';
+	import { user_name, won_jackpot } from './../../store/main.ts';
 	import { user_cash_prize } from '$lib/store/main';
 	import { money_prices } from '$lib/store/main';
 	import type QuestionInterface from "$lib/interfaces/question.interface";
@@ -82,11 +82,12 @@
     }
 </script>
 
-<h2>
+<h2 class="text-center text-2xl font-heading-bold text-white mb-3">Contestant:<br>{$user_name}</h2>
+<h3>
 	<Hexagon style="w-full min-h-[150px] black-highlight cursor-default">
         {@html currentQuestion?.question}
     </Hexagon>
-</h2>
+</h3>
 
 <div>
 	{#each currentQuestion.choices as option, index}

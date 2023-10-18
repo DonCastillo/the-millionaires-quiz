@@ -25,7 +25,6 @@ export const GET = async ({request, url}) => {
 		const collection = database.collection("scores");
 
 		let documents = await collection.find().sort({ prize: -1, date: -1 }).limit(limit).toArray();
-		console.log("documents: ", documents)
 
 		return new Response(
 			JSON.stringify({ data: documents }),
@@ -33,9 +32,10 @@ export const GET = async ({request, url}) => {
 		);
 
 	} catch(error: any) {
+		console.log("error: ", error.message);
 		return new Response(
-			JSON.stringify({ error: error.message }),
-			{ status: 400 }
+			JSON.stringify({ data: [] }),
+			{ status: 200 }
 		);
 	} finally {
 		await client.close();

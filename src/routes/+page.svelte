@@ -10,6 +10,7 @@
 
 	let userName: string | null = null;
 	let chosenMode: Mode | null = null;
+	let message: string = "";
 	
 	$: normalHighlight = chosenMode === Mode.NORMAL ? 'yellow-highlight' : 'black-highlight';
 	$: piglatinHighlight = chosenMode === Mode.PIGLATIN ? 'yellow-highlight' : 'black-highlight';
@@ -17,6 +18,10 @@
 	$: piglatinHeading = chosenMode === Mode.PIGLATIN ? 'color-primary-2' : 'color-selected-1';
 
 	const clickHandler = () => {
+		message = "";
+		if(!userName) message += "Please enter your name. <br />";
+		if(!chosenMode) message += "Please choose a mode. <br />";
+		if(message) return;
 		$user_name = userName;
 		goto(`/game/${chosenMode}`);
 	};
@@ -78,6 +83,13 @@
 			</Hexagon>
 		</div>
 	</div>
+
+	{#if message}
+		<div class="my-10 text-center text-red-300 text-xl font-heading-regular">
+			{@html message}
+		</div>
+	{/if}
+
 	<div>
 		<Button buttonText="Start" on:click={clickHandler} />
 	</div>

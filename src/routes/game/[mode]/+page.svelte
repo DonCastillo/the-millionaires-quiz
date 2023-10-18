@@ -25,8 +25,11 @@
 	import { piglatin, piglatinizeQuestions } from "$lib/utils/piglatin";
 	import { goto } from "$app/navigation";
 	import { submitScore } from "$lib/utils/score-api";
+	import Loader from "$lib/components/loader/Loader.svelte";
+
 
 	let questions: QuestionInterface[] = [];
+	let loading: boolean = false;
 	$: numOfQuestionsPerDifficulty = $number_of_questions / 3;
 	$: mode = stringToMode(data?.mode);
 	$: $money_prices =
@@ -90,6 +93,10 @@
 
 	onMount(async () => {
 		// get token
+		loading = true;
+		if(!$user_name) goto("/");
+
+		console.log($user_name);
 		console.log("whole data:", data)
 		$user_cash_prize = 0;
 		$access_token = await getToken();
@@ -110,8 +117,10 @@
 
 		// delete token
 		await deleteToken($access_token);
+		loading = false;
 	});
 </script>
+
 
 <section class="container max-w-[1124px] bg-orange-100 p-5 mx-5 min-h-[500px]">
 	<div class="flex flex-col sm:flex-row h-full">
@@ -132,3 +141,7 @@
 		</div>
 	</div>
 </section>
+
+{#if loading}
+	<Loader text = "Loading questions..." />
+{/if}
