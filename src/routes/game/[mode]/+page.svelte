@@ -30,6 +30,7 @@
 
 	let questions: QuestionInterface[] = [];
 	let loading: boolean = false;
+	let loadingText: string = "";
 	$: numOfQuestionsPerDifficulty = $number_of_questions / 3;
 	$: mode = stringToMode(data?.mode);
 	$: $money_prices =
@@ -84,17 +85,24 @@
 	};
 
 	const claimPrize = async () => {
+		loading = true;
+		loadingText = "Game is over.<br>Submitting score...";
 		// safeHaven = [0, ...safeHaven];
 		console.log("final prize: ", $user_cash_prize);
 		const scoreID = await submitScore($user_name, $user_cash_prize);
+		$user_name = "";
+		$user_cash_prize = 0;
 		// save score to db
 		goto(`/scoreboard/${scoreID}`);
+		loading = false;
+		loadingText = "";
 	};
 
 	onMount(async () => {
 		// get token
 		loading = true;
-		if(!$user_name) goto("/");
+		loadingText = "Loading questions...";
+		// if(!$user_name) goto("/");
 
 		console.log($user_name);
 		console.log("whole data:", data)
@@ -118,13 +126,14 @@
 		// delete token
 		await deleteToken($access_token);
 		loading = false;
+		loadingText = "";
 	});
 </script>
 
 
-<section class="container max-w-[1124px] bg-orange-100 p-5 mx-5 min-h-[500px]">
+<section class="container max-w-[1124px] p-5 mx-5 min-h-[500px]">
 	<div class="flex flex-col sm:flex-row h-full">
-		<div class="bg-blue-700 sm:w-3/5 lg:w-2/3">
+		<div class="sm:w-3/5 lg:w-2/3">
 			{#if questions.length > 0}
 				<Question
 					{questions}
@@ -143,5 +152,5 @@
 </section>
 
 {#if loading}
-	<Loader text = "Loading questions..." />
+	<Loader text={loadingText} />
 {/if}

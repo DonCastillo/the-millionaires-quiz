@@ -1,6 +1,7 @@
 <script lang="ts">
+	import { LifelineName, LifelineLists } from '$lib/constants/lifeline.constants';
 	import { formatCurrency } from '$lib/utils/utils';
-	import { user_name, won_jackpot } from './../../store/main.ts';
+	import { user_name, won_jackpot } from '$lib/store/main';
 	import { user_cash_prize } from '$lib/store/main';
 	import { money_prices } from '$lib/store/main';
 	import type QuestionInterface from "$lib/interfaces/question.interface";
@@ -8,10 +9,12 @@
 	import Hexagon from "../container/Hexagon.svelte";
 	import Option from "./Option.svelte";
 	import { createEventDispatcher, onMount } from "svelte";
+	import Lifeline from '../container/Lifeline.svelte';
 	const dispatch = createEventDispatcher();
 	const letters = ["A", "B", "C", "D"];
 
 	export let questions: QuestionInterface[] = [];
+    let lifelines = LifelineLists;
 	let questionIndex: number = 0;
 	let optionSelected: string | null = null;
     let revealAnswer: boolean = false;
@@ -24,6 +27,7 @@
     $: console.log("option selected----: ", optionSelected )
     $: console.log("choices: ", currentQuestion.choices)
 	$: correctAnswer = currentQuestion.choices.find((choice) => choice.isCorrect)?.label;
+    console.log("lifelines: ", lifelines);
 
     onMount(() => {
         resetParameters();
@@ -61,6 +65,7 @@
 
     const claimPrize = () => {
         dispatch("claimprize");
+        resetParameters();
     }
 
     const disabledAllOptions = () => {
@@ -82,7 +87,17 @@
     }
 </script>
 
-<h2 class="text-center text-2xl font-heading-bold text-white mb-3">Contestant:<br>{$user_name}</h2>
+<div class="flex flex-row mb-4">
+    <h2 class="text-left text-md font-heading-bold text-white mb-3 max-w-[300px] bg-pink-300">
+        <p>Contestant:</p>
+        <p>{$user_name}</p>
+    </h2>
+    <div class="bg-orange-100 flex-1 flex flex-wrap justify-end gap-3">
+        {#each lifelines as lifeline}
+            <Lifeline name={lifeline.name} icon={lifeline.icon} description={lifeline.description}/>
+        {/each}
+    </div>
+</div>
 <h3>
 	<Hexagon style="w-full min-h-[150px] black-highlight cursor-default">
         {@html currentQuestion?.question}

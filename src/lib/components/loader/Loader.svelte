@@ -2,7 +2,8 @@
     export let text: string = "Loading";
 </script>
 
-<div class="absolute top-0 left-0 h-full w-full bg-slate-950 opacity-80 z-50">
+<div class="fixed top-0 left-0 bottom-0 right-0 h-screen w-screen overflow-hidden bg-primary-2 opacity-90 z-50 text-white"></div>
+<div class="fixed top-0 left-0 bottom-0 right-0 h-screen w-screen overflow-hidden flex items-center justify-center z-[99] text-white">
     <div class="h-full w-full flex flex-col items-center justify-center">
         <div role="status">
             <svg aria-hidden="true" class="inline w-20 h-20 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-gray-600 dark:fill-gray-300" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -11,6 +12,6 @@
             </svg>
             <span class="sr-only">{text}</span>
         </div>
-        <h3 class="font-heading-bold text-3xl mt-5 color-selected-2 text-center">{text}</h3>
+        <h3 class="font-heading-bold text-3xl mt-5 color-selected-2 text-center">{@html text}</h3>
     </div>
 </div>

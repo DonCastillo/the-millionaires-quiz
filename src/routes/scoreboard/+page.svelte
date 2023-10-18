@@ -15,6 +15,7 @@
 	<Loader text="Loading Scores ..." />
 {:then scores}
 	{#if scores.length > 0}
+		<h2 class="text-white text-center mb-5 text-2xl color-selected-2 font-heading-regular">Top Scorers</h2>
 		<section class="container max-w-[1124px] p-5 mx-5 min-h-[500px]">
 			{#each scores as { _id, prize, username, date }, i}
 				<Score rank={i + 1} {username} {prize} {date} />
