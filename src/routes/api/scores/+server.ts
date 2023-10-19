@@ -28,7 +28,7 @@ export const GET = async ({request, url}) => {
 		);
 
 	} catch(error: any) {
-		console.log("error: ", error.message);
+		console.log("error: ", error);
 		return new Response(
 			JSON.stringify({ data: [] }),
 			{ status: 200 }
