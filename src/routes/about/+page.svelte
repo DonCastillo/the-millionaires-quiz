@@ -1,3 +1,8 @@
+<script lang="ts">
+	import { user_name } from "$lib/store/main";
+
+    $user_name = "";
+</script>
 <section class="container max-w-[1124px] p-5 mx-5 min-h-[500px]">
     <h2 class="text-white text-center mb-5 text-4xl color-selected-2 font-heading-regular">How to Play the Game?</h2>
     <div class="text-white font-normal-regular text-2xl">

@@ -3,7 +3,9 @@
 	import Button from "$lib/components/container/Button.svelte";
     import Score from "$lib/components/container/Score.svelte";
 	import Loader from "$lib/components/loader/Loader.svelte";
+	import { user_name } from "$lib/store/main";
 	import {getScores} from "$lib/utils/score-api";
+	$user_name = "";
 </script>
 
 {#await getScores(10)}

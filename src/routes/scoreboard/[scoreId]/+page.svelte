@@ -3,10 +3,12 @@
 	import Button from "$lib/components/container/Button.svelte";
 	import Score from "$lib/components/container/Score.svelte";
 	import Loader from "$lib/components/loader/Loader.svelte";
+	import { user_name } from "$lib/store/main";
 	import { getScore, getScores } from "$lib/utils/score-api";
 
 	/** @type {import('./$types').PageData} */
 	export let data: any;    
+    $user_name = "";
 </script>
 
 {#await getScore(data.scoreId)}
