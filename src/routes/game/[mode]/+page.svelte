@@ -102,7 +102,7 @@
 		// get token
 		loading = true;
 		loadingText = "Loading questions...";
-		// if(!$user_name) goto("/");
+		if(!$user_name) goto("/");
 
 		console.log($user_name);
 		console.log("whole data:", data)
@@ -117,6 +117,10 @@
 				...results[2],
 			]);
 		}
+
+		if(!questions) goto("/")
+
+		console.log("Loaded Questions: ", questions);
 
 		// piglatinize questions
 		if (mode === Mode.PIGLATIN) {
