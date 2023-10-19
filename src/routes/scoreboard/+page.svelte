@@ -3,13 +3,7 @@
 	import Button from "$lib/components/container/Button.svelte";
     import Score from "$lib/components/container/Score.svelte";
 	import Loader from "$lib/components/loader/Loader.svelte";
-	import {getScores } from "$lib/utils/score-api";
-	import axios from "axios";
-
-	// const getAllScores = () => axios.get(`${data.baseURL}/api/scores`).then((res) => res.data.data);
-	// const getAllScores = () => getScores();
-	// console.log("get all scores: ", getAllScores());
-	console.log("scoreboard here...", getScores(10))
+	import {getScores} from "$lib/utils/score-api";
 </script>
 
 {#await getScores(10)}

@@ -32,36 +32,38 @@ const getHeader = async () => {
 	};
 };
 
-// const user = await loginEmailPassword('<USER_EMAIL>', '<USER_PASSWORD>');
-// return user.accessToken;
 
-// const client = new MongoClient(BASE_URI);
+export const submitScore = async (username: string | null, prize: number = 0) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+			const data = JSON.stringify({
+				collection: MONGO_COLLECTION,
+				database: MONGO_DB,
+				dataSource: MONGO_DB_SOURCE,
+                document: {
+                    username: username,
+                    prize: prize,
+                    date: new Date()
+                }
+			});
 
-// const connect = async () => {
-//     await client.connect();
-//     await client.db("millionaire-quiz").command({ ping: 1 });
-//     console.log("Pinged your deployment. You successfully connected to MongoDB!");
-// }
+			var config = {
+				method: "post",
+				url: `${MONGO_BASE_URI}/action/insertOne`,
+				headers: await getHeader(),
+				data: data,
+			};
 
-// const disconnect = async () => {
-//     await client.close();
-// }
-
-// export const submitScore = async (username: string | null, prize: number = 0) => {
-//     // return new Promise(async (resolve, reject) => {
-//     //     console.log('submitting score ...');
-//     //     if(!username) reject(new Error('Invalid username'));
-//     //     await axios.post(`${BASE_ENDPOINT}`, {
-//     //         username,
-//     //         prize
-//     //     }).then((response) => {
-//     //         if(response.status !== 201) throw new Error();
-//     //         if(!response.data.data.insertedId) throw new Error();
-//     //         resolve(response.data.data.insertedId)
-//     //     })
-//     //     .catch((error) => reject(new Error('Cannot submit score.')))
-//     // });
-// };
+			await axios(config).then((response) => {
+				if (response.status !== 201) throw new Error();
+                if(!response.data.insertedId) throw new Error();
+				resolve(response.data.insertedId);
+			});
+		} catch (error: any) {
+			reject(new Error("Cannot retrieve scores."));
+		}
+    });
+};
 
 export const getScores = async (limit: number = 10) => {
 	console.log("getting Scores..");
@@ -71,7 +73,7 @@ export const getScores = async (limit: number = 10) => {
 				collection: MONGO_COLLECTION,
 				database: MONGO_DB,
 				dataSource: MONGO_DB_SOURCE,
-				sort: { date: -1, prize: -1 },
+				sort: { prize: -1, date: -1, },
 				limit: limit,
 			});
 
@@ -85,7 +87,6 @@ export const getScores = async (limit: number = 10) => {
 			await axios(config).then((response) => {
 				if (response.status !== 200) throw new Error();
 				let documents = response.data.documents;
-                console.log("documents: ", (documents))
 				resolve(documents);
 			});
 		} catch (error: any) {
@@ -94,14 +95,31 @@ export const getScores = async (limit: number = 10) => {
 	});
 };
 
-// export const getScore = async (id: string) => {
-//     // return new Promise<ScoreInterface>(async (resolve, reject) => {
-//     //     console.log('retrieving score ...');
-//     //     await axios.get(`${BASE_ENDPOINT}/${id}`).then((response) => {
-//     //         if(response.status !== 200) throw new Error();
-//     //         if(!response.data.data) throw new Error();
-//     //         resolve(response.data.data);
-//     //     })
-//     //     .catch((error) => reject(new Error('Cannot retrieve score.')))
-//     // });
-// }
+export const getScore = async (id: string) => {
+    return new Promise<ScoreInterface>(async (resolve, reject) => {
+        try {
+			const data = JSON.stringify({
+				collection: MONGO_COLLECTION,
+				database: MONGO_DB,
+				dataSource: MONGO_DB_SOURCE,
+                filter: { _id: { "$oid": id } }
+			});
+
+			var config = {
+				method: "post",
+				url: `${MONGO_BASE_URI}/action/findOne`,
+				headers: await getHeader(),
+				data: data,
+			};
+
+			await axios(config).then((response) => {
+				if (response.status !== 200) throw new Error();
+				let documents = response.data.document;
+                if(Object.keys(documents).length === 0) throw new Error("No such score found.");
+				resolve(documents);
+			});
+		} catch (error: any) {
+			reject(new Error("Cannot retrieve score."));
+		}
+    });
+}
