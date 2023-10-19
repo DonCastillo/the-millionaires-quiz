@@ -75,8 +75,7 @@
 					Pig Latin Mode
 				</h3>
 				<p class="leading-6">
-					Questions and choices will be translated into Pig Latin language. You
-					will have 3 lifelines and the prize money each round is doubled the
+					Questions and choices will be translated into Pig Latin language. The prize money each round is doubled the
 					amount than the normal mode. You can win as much as $2 Million.
 				</p>
 			</Hexagon>
