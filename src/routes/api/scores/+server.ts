@@ -6,7 +6,7 @@ const client = new MongoClient(BASE_URI, {
 	connectTimeoutMS: 20000, // 
 });
 
-
+console.log("BASE_URI: ", BASE_URI)
 
 export const GET = async ({request, url}) => {
 	console.log("Getting All Scores");
