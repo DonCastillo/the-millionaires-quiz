@@ -62,8 +62,7 @@
 					Normal Mode
 				</h3>
 				<p class="leading-6">
-					Play this game normally. You will have 3 lifelines and you can win as
-					much as $1 Million.
+					Play this game in normal mode. You can win as much as $1 Million.
 				</p>
 			</Hexagon>
 		</div>

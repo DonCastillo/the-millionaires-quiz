@@ -104,7 +104,7 @@
 		loadingText = "Loading questions...";
 		if(!$user_name) goto("/");
 
-		console.log($user_name);
+		console.log("USER NAME: ", $user_name);
 		console.log("whole data:", data)
 		$user_cash_prize = 0;
 		$access_token = await getToken();
