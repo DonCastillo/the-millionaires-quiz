@@ -11,6 +11,7 @@
 	import { createEventDispatcher, onMount } from "svelte";
 	import Lifeline from '../container/Lifeline.svelte';
 	import { getLifeline } from '$lib/utils/type';
+	import { goto } from '$app/navigation';
 	const dispatch = createEventDispatcher();
 	const letters = ["A", "B", "C", "D"];
 
@@ -31,6 +32,7 @@
     console.log("lifelines: ", lifelines);
 
     onMount(() => {
+        if(!$user_name) goto("/");
         resetParameters();
     })
 
@@ -105,11 +107,11 @@
     <h2 class="w-full sm:w-1/2 text-left text-md font-heading-bold text-white mb-3 sm:mb-0 w-fullmax-w-[300px]">
         Contestant: {$user_name}
     </h2>
-    <div class="w-full sm:w-1/2  flex flex-wrap justify-end gap-3">
+    <!-- <div class="w-full sm:w-1/2  flex flex-wrap justify-end gap-3">
         {#each lifelines as lifeline}
             <Lifeline name={lifeline.name} icon={lifeline.icon} description={lifeline.description} on:use={useLifeline}/>
         {/each}
-    </div>
+    </div> -->
 </div>
 <h3>
 	<Hexagon style="w-full min-h-[150px] black-highlight cursor-default">

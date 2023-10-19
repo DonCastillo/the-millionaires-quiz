@@ -9,7 +9,7 @@
 	<header class="p-3 py-5 text-white">
 		<h1 class="text-2xl">The Millionnaire's Quiz</h1>
 	</header>
-	{#if !$user_name}
+	<!-- {#if !$user_name} -->
 		<nav class="text-white py-3 text-xl font-heading-regular">
 			<ul class="flex flex-row flex-nowrap justify-center items-center gap-12">
 				<li><a href="/" aria-current={$page.url.pathname === '/'}>Home</a></li>
@@ -17,7 +17,7 @@
 				<li><a href="/about" aria-current={$page.url.pathname === '/about'}>About</a></li>
 			</ul>
 		</nav>
-	{/if}
+	<!-- {/if} -->
 	<main id="main-wrapper" class="flex flex-col justify-center items-center">
 		<slot />
 	</main>
