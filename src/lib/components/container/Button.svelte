@@ -5,7 +5,7 @@
 </script>
 
 <button
-	class="button block w-full py-4 px-2 text-2xl font-heading-bold shadow-md bg-primary-1 text-white {style}"
+	class="button block w-full py-4 px-2 text-2xl font-heading-bold shadow-md bg-primary-1 text-white mb-5 {style}"
 	class:yellow-highlight={focused}
 	on:mouseenter={() => (focused = true)}
 	on:mouseleave={() => (focused = false)}

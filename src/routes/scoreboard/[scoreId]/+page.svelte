@@ -18,6 +18,10 @@
             <Score username={scores.username} prize={scores.prize} date={scores.date} />
         </section>
     {/if}
+{:catch error}
+	<h3 class="font-heading-bold text-3xl mt-5 color-selected-2 text-center mb-10">
+		{error.message}
+	</h3>
 {/await}
 
 {#await getScores(10)}
@@ -36,7 +40,10 @@
         </h3>
         <Button buttonText="Play Now!" style="max-w-[200px] mt-10" on:click={() => goto("/")}/>
     {/if}
-   
+{:catch error}
+	<h3 class="font-heading-bold text-3xl mt-5 color-selected-2 text-center mb-10">
+		{error.message}
+	</h3>
 {/await}
 
 

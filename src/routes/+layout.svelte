@@ -11,10 +11,10 @@
 	</header>
 	<!-- {#if !$user_name} -->
 		<nav class="text-white py-3 text-xl font-heading-regular">
-			<ul class="flex flex-row flex-nowrap justify-center items-center gap-12">
+			<ul class="flex flex-col sm:flex-row flex-nowrap justify-center items-center gap-1 sm:gap-12">
 				<li><a href="/" aria-current={$page.url.pathname === '/'}>Home</a></li>
 				<li><a href="/scoreboard" aria-current={$page.url.pathname === '/scoreboard'}>Scoreboard</a></li>
-				<li><a href="/about" aria-current={$page.url.pathname === '/about'}>About</a></li>
+				<li><a href="/about" aria-current={$page.url.pathname === '/about'}>How to Play</a></li>
 			</ul>
 		</nav>
 	<!-- {/if} -->

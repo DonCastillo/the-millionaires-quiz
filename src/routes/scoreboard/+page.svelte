@@ -22,5 +22,9 @@
 		</h3>
         <Button buttonText="Play Now!" style="max-w-[200px] mt-10" on:click={() => goto("/")}/>
 	{/if}
+{:catch error}
+	<h3 class="font-heading-bold text-3xl mt-5 color-selected-2 text-center">
+		{error.message}
+	</h3>
 {/await}
  
