@@ -1,25 +1,28 @@
 <script lang="ts">
 	import "./styles.css";
 	import { page } from "$app/stores";
+	import { user_name } from "$lib/store/main";
 	console.log("page", $page);
 </script>
 
 <div class="app">
-	<header class="p-3 text-white">
-		<h1>The Millionnaire's Quiz</h1>
+	<header class="p-3 py-5 text-white">
+		<h1 class="text-2xl">The Millionnaire's Quiz</h1>
 	</header>
-	<nav class="text-white py-3 text-2xl font-heading-bold">
-		<ul class="flex flex-row flex-nowrap justify-center items-center gap-12">
-			<li><a href="/" aria-current={$page.url.pathname === '/'}>Home</a></li>
-			<li><a href="/scoreboard" aria-current={$page.url.pathname === '/scoreboard'}>Scoreboard</a></li>
-			<li><a href="/about" aria-current={$page.url.pathname === '/about'}>About</a></li>
-		</ul>
-	</nav>
+	{#if !$user_name}
+		<nav class="text-white py-3 text-xl font-heading-regular">
+			<ul class="flex flex-row flex-nowrap justify-center items-center gap-12">
+				<li><a href="/" aria-current={$page.url.pathname === '/'}>Home</a></li>
+				<li><a href="/scoreboard" aria-current={$page.url.pathname === '/scoreboard'}>Scoreboard</a></li>
+				<li><a href="/about" aria-current={$page.url.pathname === '/about'}>About</a></li>
+			</ul>
+		</nav>
+	{/if}
 	<main id="main-wrapper" class="flex flex-col justify-center items-center">
 		<slot />
 	</main>
 	<footer class="p-4">
-		<p class="text-center">Developed by Don Castillo</p>
+		<p class="text-center text-white font-heading-regular">Developed by Don Castillo</p>
 	</footer>
 </div>
 
@@ -34,14 +37,5 @@
 	}
 	#main-wrapper {
 		flex: 1;
-	}
-	header {
-		/* background-color: green; */
-	}
-	main {
-		/* background-color: pink; */
-	}
-	footer {
-		/* background-color: blue; */
 	}
 </style>

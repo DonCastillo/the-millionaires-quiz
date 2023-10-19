@@ -15,7 +15,7 @@
     $: moneyTree.reverse();
 </script>
 
-<div class="bg-primary-2">
+<div class="">
     {#each moneyTree as { number, price, isHighlighted}}
         <Prize number={number} price={price} isHighlighted={isHighlighted} />
     {/each}
