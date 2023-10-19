@@ -1,17 +1,9 @@
-import { MONGODB_PASSWORD, MONGODB_USER_NAME } from "$lib/env";
+import { MONGO_APP_ID, MONGO_BASE_URI, MONGO_COLLECTION, MONGO_DB, MONGO_DB_SOURCE, MONGO_USER_EMAIL, MONGO_USER_PASSWORD } from "$lib/env"
 import type ScoreInterface from "$lib/interfaces/score.interface";
 import axios from "axios";
 import * as Realm from "realm-web";
-const app = new Realm.App({ id: "data-mzvcu" });
-const MONGO_USER_EMAIL = "don.qcastillo@yahoo.com";
-const MONGO_USER_PASSWORD = "1234567890";
-const MONGO_COLLECTION = "scores";
-const MONGO_DB = "millionaire-quiz";
-const MONGO_DB_SOURCE = "Cluster0";
-const MONGO_BASE_URI =
-	"https://us-west-2.aws.data.mongodb-api.com/app/data-mzvcu/endpoint/data/v1";
 
-// const BASE_URI = `mongodb+srv://${MONGODB_USER_NAME}:${MONGODB_PASSWORD}@cluster0.tdex8lk.mongodb.net/?retryWrites=true&w=majority`;
+const app = new Realm.App({ id: MONGO_APP_ID });
 
 const getAccessToken = async () => {
 	const credentials = Realm.Credentials.emailPassword(
