@@ -3,15 +3,16 @@
 	import Button from "$lib/components/container/Button.svelte";
     import Score from "$lib/components/container/Score.svelte";
 	import Loader from "$lib/components/loader/Loader.svelte";
+	import {getScores } from "$lib/utils/score-api";
 	import axios from "axios";
 
-    /** @type {import('./$types').PageData} */
-	export let data: any;
-
-	const getAllScores = () => axios.get(`${data.baseURL}/api/scores`).then((res) => res.data.data);
+	// const getAllScores = () => axios.get(`${data.baseURL}/api/scores`).then((res) => res.data.data);
+	// const getAllScores = () => getScores();
+	// console.log("get all scores: ", getAllScores());
+	console.log("scoreboard here...", getScores(10))
 </script>
 
-{#await getAllScores()}
+{#await getScores(10)}
 	<Loader text="Loading Scores ..." />
 {:then scores}
 	{#if scores.length > 0}
@@ -28,3 +29,4 @@
         <Button buttonText="Play Now!" style="max-w-[200px] mt-10" on:click={() => goto("/")}/>
 	{/if}
 {/await}
+ 

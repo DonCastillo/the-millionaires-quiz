@@ -3,7 +3,12 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 
 const BASE_URI = `mongodb+srv://${MONGODB_USER_NAME}:${MONGODB_PASSWORD}@cluster0.tdex8lk.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(BASE_URI, {
-	connectTimeoutMS: 20000, // 
+
+	serverApi: {
+		version: ServerApiVersion.v1,
+		deprecationErrors: false,
+		strict: true,
+	}
 });
 
 console.log("BASE_URI: ", BASE_URI)
