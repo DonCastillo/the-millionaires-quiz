@@ -2,13 +2,7 @@ import { MONGODB_PASSWORD, MONGODB_USER_NAME } from "$lib/env";
 import { MongoClient, ServerApiVersion, ObjectId } from "mongodb";
 
 const BASE_URI = `mongodb+srv://${MONGODB_USER_NAME}:${MONGODB_PASSWORD}@cluster0.tdex8lk.mongodb.net/?retryWrites=true&w=majority`;
-const client = new MongoClient(BASE_URI, {
-	serverApi: {
-		version: ServerApiVersion.v1,
-		strict: true,
-		deprecationErrors: true,
-	},
-});
+const client = new MongoClient(BASE_URI);
 
 export const GET = async ({ params }) => {
 	console.log("Getting A Scores");
