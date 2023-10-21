@@ -31,6 +31,7 @@
 	let questions: QuestionInterface[] = [];
 	let loading: boolean = false;
 	let loadingText: string = "";
+	let errorMessage: string = "";
 	$: numOfQuestionsPerDifficulty = $number_of_questions / 3;
 	$: mode = stringToMode(data?.mode);
 	$: $money_prices =
@@ -99,44 +100,51 @@
 	};
 
 	onMount(async () => {
-		// get token
-		loading = true;
-		loadingText = "Loading questions...";
-		if(!$user_name) goto("/");
+		try {
+			// get token
+			errorMessage = "";
+			loading = true;
+			loadingText = "Loading questions...";
+			if(!$user_name) goto("/");
 
-		console.log("USER NAME: ", $user_name);
-		console.log("whole data:", data)
-		$user_cash_prize = 0;
-		$access_token = await getToken();
+			console.log("USER NAME: ", $user_name);
+			console.log("whole data:", data)
+			$user_cash_prize = 0;
+			$access_token = await getToken();
 
-		// retrieve questions
-		if (questionsPromise) {
-			questions = await Promise.all(questionsPromise).then((results) => [
-				...results[0],
-				...results[1],
-				...results[2],
-			]);
+			// retrieve questions
+			if (questionsPromise) {
+				questions = await Promise.all(questionsPromise)
+					.then((results) => [
+						...results[0],
+						...results[1],
+						...results[2],
+					]);
+			}
+
+			if(!questions) goto("/")
+
+			console.log("Loaded Questions: ", questions);
+
+			// piglatinize questions
+			if (mode === Mode.PIGLATIN) {
+				questions = piglatinizeQuestions(questions);
+			}
+
+			// delete token
+			await deleteToken($access_token);
+			loading = false;
+			loadingText = "";
+		} catch (error) {
+			errorMessage = "Cannot load questions. Please refresh the page.";
 		}
 
-		if(!questions) goto("/")
-
-		console.log("Loaded Questions: ", questions);
-
-		// piglatinize questions
-		if (mode === Mode.PIGLATIN) {
-			questions = piglatinizeQuestions(questions);
-		}
-
-		// delete token
-		await deleteToken($access_token);
-		loading = false;
-		loadingText = "";
 	});
 </script>
 
 
 <section class="container max-w-[1124px] p-5 mx-5 min-h-[500px]">
-	<div class="flex flex-col sm:flex-row h-full">
+	<div class="flex flex-col sm:flex-row sm:items-center h-full">
 		<div class="sm:w-3/5 lg:w-2/3">
 			{#if questions.length > 0}
 				<Question
@@ -145,6 +153,11 @@
 					on:incorrect={incorrect}
 					on:claimprize={claimPrize}
 				/>
+			{/if}
+			{#if errorMessage}
+				<h3 class="font-heading-bold text-3xl mt-5 color-selected-2 text-center mb-10">
+					{errorMessage}
+				</h3>
 			{/if}
 		</div>
 		<div class="sm:w-2/5 lg:w-1/3">

@@ -69,7 +69,7 @@ export const getQuestions = async (token: string | null, amount: number, difficu
     return new Promise<QuestionInterface[]>(async (resolve, reject) => {
         console.log("retrieving questions ...");
         if(!token) reject(new Error("Invalid token"));
-        await axios.get(`${BASE_ENDPOINT}/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple&token=${token}`)
+        await axios.get(`${BASE_ENDPOINT}/api.php?amount=${amount}&difficulty=${difficulty}&type=multiple&token=${token}&category=9`)
             .then((response) => {
                 if(response.status !== 200) throw new Error();
                 if(response.data.response_code !== 0) throw new Error();
