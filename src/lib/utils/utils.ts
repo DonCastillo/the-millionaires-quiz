@@ -14,6 +14,11 @@ const shuffleArray = (array: any[]) => {
 	  [array[i], array[j]] = [array[j], array[i]];
 	}
 	return array;
-  };
+};
 
-export { formatCurrency, shuffleArray };
+const getRandomNumberBetween = (min: number, max: number) => {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+  
+
+export { formatCurrency, shuffleArray, getRandomNumberBetween };

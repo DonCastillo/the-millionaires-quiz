@@ -12,7 +12,7 @@
 	import { getLifeline } from '$lib/utils/type';
 	import { goto } from '$app/navigation';
 	import { Mode } from '$lib/constants/mode.constants.js';
-	import { getLifelines, useFiftyFifty } from '$lib/utils/lifeline';
+	import { getLifelines, useAskTheAudience, useFiftyFifty } from '$lib/utils/lifeline';
 	import { LifelineName } from '$lib/constants/lifeline.constants';
 	import type ChoiceInterface from '$lib/interfaces/choice.interface';
 	const dispatch = createEventDispatcher();
@@ -108,6 +108,10 @@
                 currentOptions = useFiftyFifty(currentOptions);
                 disableLifeline(LifelineName.FIFTY_FIFTY);
                 break;
+            case LifelineName.ASK_THE_AUDIENCE:
+                currentOptions = useAskTheAudience(currentOptions);
+                disableLifeline(LifelineName.ASK_THE_AUDIENCE);
+                break;
         }
     }
 
@@ -153,6 +157,7 @@
             isAnswer={revealAnswer && (correctAnswer === option.label)}
             disabled={option.disabled}
             invisible={option.invisible}
+            audienceVote={option.audience_vote}
 			bind:optionSelected
 		/>
 	{/each}

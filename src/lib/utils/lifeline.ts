@@ -5,8 +5,7 @@ import {
 import { Mode } from "$lib/constants/mode.constants";
 import type ChoiceInterface from "$lib/interfaces/choice.interface";
 import type LifelineInterface from "$lib/interfaces/lifeline.interface";
-import { get } from "svelte/store";
-import { shuffleArray } from "./utils";
+import { getRandomNumberBetween, shuffleArray } from "./utils";
 const {
 	FIFTY_FIFTY,
 	ASK_THE_AUDIENCE,
@@ -26,28 +25,47 @@ export const useFiftyFifty = (choices: ChoiceInterface[]): ChoiceInterface[] => 
 			incorrectChoiceIndexes = [...incorrectChoiceIndexes, index];
     });
 
-    const randomIncorrectChoiceIndex = shuffleArray(incorrectChoiceIndexes)[0];
-
-	// console.log("correctChoiceIndex: ", correctChoiceIndex)
-	// console.log("incorrectChoiceIndexes: ", incorrectChoiceIndexes)
-	// console.log("randomIncorrectChoiceIndex: ", randomIncorrectChoiceIndex)
-
+    const randomIncorrectChoiceIndex: number = shuffleArray(incorrectChoiceIndexes)[0];
     return choices.map((choice, index) => {
-        if(index !== correctChoiceIndex && index !== randomIncorrectChoiceIndex) {
-            return {...choice, disabled: true, invisible: true};
-        }
+        if(index !== correctChoiceIndex && index !== randomIncorrectChoiceIndex)
+			return {...choice, disabled: true, invisible: true};
         return {...choice, disabled: false, invisible: false};
     })
 };
 
 
 
-// export const useAskTheAudience = (choices: ChoiceInterface[]): ChoiceInterface[] => {
-//     const correctChoiceIndex = choices.findIndex(choice => choice.isCorrect);
-//     const incorrectChoiceIndexes = choices.map((choice, index) => {
-//         if(!choice.isCorrect) return index;
-//     });
-// };
+export const useAskTheAudience = (choices: ChoiceInterface[]): ChoiceInterface[] => {
+	const additionalPoints = 15;
+	let totalPoints = 0;
+	console.log("using ask the audience...");
+	choices = choices.map((choice) => {
+		let audienceVote = 0;
+
+		if(choice.disabled) 
+			return choice;
+
+		if(choice.isCorrect) 
+			audienceVote = additionalPoints + getRandomNumberBetween(0, 45)
+		else 
+			audienceVote = getRandomNumberBetween(0, 45)
+
+		totalPoints += audienceVote;
+		return {...choice, audience_vote: audienceVote};
+	});
+
+	choices = choices.map((choice) => {
+		if(choice.disabled)
+			return choice;
+
+		if (choice.audience_vote !== undefined)
+			return {...choice, audience_vote: (choice.audience_vote / totalPoints) * 100}
+		
+		return choice;
+	});
+
+	return choices;
+};
 
 
 const getLifelineDefinitions = (lifelines: LifelineName[]): LifelineInterface[] => {
