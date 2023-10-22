@@ -5,5 +5,5 @@ export default interface LifelineInterface {
     type: LifelineName,
     icon: string,
     description: string,
-    used: boolean
+    disabled: boolean
 }

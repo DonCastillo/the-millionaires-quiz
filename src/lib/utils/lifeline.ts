@@ -16,17 +16,27 @@ const {
 } = LifelineName;
 
 export const useFiftyFifty = (choices: ChoiceInterface[]): ChoiceInterface[] => {
-    const correctChoiceIndex = choices.findIndex(choice => choice.isCorrect);
-    const incorrectChoiceIndexes = choices.map((choice, index) => {
-        if(!choice.isCorrect) return index;
+	console.log("current option inside useFiftyFifty: ", choices)
+
+    const correctChoiceIndex: number = choices.findIndex(choice => choice.isCorrect);
+    let incorrectChoiceIndexes: number[] = [];
+	
+	choices.forEach((choice, index) => {
+        if(!choice.isCorrect)
+			incorrectChoiceIndexes = [...incorrectChoiceIndexes, index];
     });
+
     const randomIncorrectChoiceIndex = shuffleArray(incorrectChoiceIndexes)[0];
+
+	// console.log("correctChoiceIndex: ", correctChoiceIndex)
+	// console.log("incorrectChoiceIndexes: ", incorrectChoiceIndexes)
+	// console.log("randomIncorrectChoiceIndex: ", randomIncorrectChoiceIndex)
 
     return choices.map((choice, index) => {
         if(index !== correctChoiceIndex && index !== randomIncorrectChoiceIndex) {
             return {...choice, disabled: true, invisible: true};
         }
-        return choice
+        return {...choice, disabled: false, invisible: false};
     })
 };
 

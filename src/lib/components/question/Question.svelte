@@ -12,7 +12,9 @@
 	import { getLifeline } from '$lib/utils/type';
 	import { goto } from '$app/navigation';
 	import { Mode } from '$lib/constants/mode.constants.js';
-	import { getLifelines } from '$lib/utils/lifeline';
+	import { getLifelines, useFiftyFifty } from '$lib/utils/lifeline';
+	import { LifelineName } from '$lib/constants/lifeline.constants';
+	import type ChoiceInterface from '$lib/interfaces/choice.interface';
 	const dispatch = createEventDispatcher();
 	const letters = ["A", "B", "C", "D"];
 
@@ -28,6 +30,8 @@
 	$: currentQuestionObject = questions[questionIndex % questions.length];
     $: currentQuestion = currentQuestionObject?.question;
     $: currentOptions = currentQuestionObject?.choices;
+    $: console.log("current options: ", currentOptions);
+    $: console.log("lifelines: ", lifelines);
 
     // console.log("questions loaded inside the component: ", questions);
     // $: console.log("option selected----: ", optionSelected )
@@ -39,7 +43,7 @@
         if(!$user_name) goto("/");
         if(!$question_mode) goto("/");
         resetParameters();
-        console.log("lifelines inside the Question component: ", lifelines);
+        // console.log("lifelines inside the Question component: ", lifelines);
     })
 
 
@@ -78,11 +82,33 @@
     }
 
     const disabledAllOptions = () => {
-        disabledOptions = currentOptions.map((choice) => choice.label);
+        currentOptions = currentOptions?.map((choice) => {
+            return {...choice, disabled: true}
+        })
     }
 
     const disabledAnOption = (option: []) => {
         disabledOptions = option;
+    }
+
+    const disableLifeline = (lifeline: LifelineName) => {
+        lifelines = lifelines.map((l) => {
+            if(l.type === lifeline) {
+                return {...l, disabled: true}
+            }
+            return l;
+        })
+    }
+
+    const useLifeline = (event: any) => {
+        console.log("+++++++++++")
+        console.log('Event: ', event.detail.type);
+        switch(event.detail.type) {
+            case LifelineName.FIFTY_FIFTY:
+                currentOptions = useFiftyFifty(currentOptions);
+                disableLifeline(LifelineName.FIFTY_FIFTY);
+                break;
+        }
     }
 
     const resetParameters = () => {
@@ -106,8 +132,8 @@
                 icon={lifeline.icon} 
                 description={lifeline.description} 
                 type={lifeline.type}
-                disabled={lifeline.used}
-                on:use={(event) => console.log("lifeline used: ", event.detail)}
+                disabled={lifeline.disabled}
+                on:use={useLifeline}
             />
         {/each}
     </div>
@@ -125,7 +151,8 @@
 			optionText={option.label}
             isSelected={optionSelected === option.label}
             isAnswer={revealAnswer && (correctAnswer === option.label)}
-            disabled={disabledOptions.includes(option.label)}
+            disabled={option.disabled}
+            invisible={option.invisible}
 			bind:optionSelected
 		/>
 	{/each}
