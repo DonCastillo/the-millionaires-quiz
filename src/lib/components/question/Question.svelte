@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { LifelineName, LifelineLists } from '$lib/constants/lifeline.constants';
+	import { question_mode } from '$lib/store/main';
 	import { formatCurrency } from '$lib/utils/utils';
 	import { user_name, won_jackpot } from '$lib/store/main';
 	import { user_cash_prize } from '$lib/store/main';
-	import { money_prices } from '$lib/store/main';
 	import type QuestionInterface from "$lib/interfaces/question.interface";
 	import Button from "../container/Button.svelte";
 	import Hexagon from "../container/Hexagon.svelte";
@@ -12,28 +11,35 @@
 	import Lifeline from '../container/Lifeline.svelte';
 	import { getLifeline } from '$lib/utils/type';
 	import { goto } from '$app/navigation';
+	import { Mode } from '$lib/constants/mode.constants.js';
+	import { getLifelines } from '$lib/utils/lifeline';
 	const dispatch = createEventDispatcher();
 	const letters = ["A", "B", "C", "D"];
 
 	export let questions: QuestionInterface[] = [];
-    let lifelines = LifelineLists;
 	let questionIndex: number = 0;
 	let optionSelected: string | null = null;
     let revealAnswer: boolean = false;
     let message: string = "";
     let showProceedButton: boolean = false;
     let disabledOptions: string[] = [];
-    let gameOver: boolean = false;
+    let lifelines = $question_mode ? getLifelines($question_mode) : getLifelines(Mode.NORMAL)
 
-	$: currentQuestion = questions[questionIndex % questions.length];
-    $: console.log("option selected----: ", optionSelected )
-    $: console.log("choices: ", currentQuestion.choices)
-	$: correctAnswer = currentQuestion.choices.find((choice) => choice.isCorrect)?.label;
-    console.log("lifelines: ", lifelines);
+	$: currentQuestionObject = questions[questionIndex % questions.length];
+    $: currentQuestion = currentQuestionObject?.question;
+    $: currentOptions = currentQuestionObject?.choices;
+
+    // console.log("questions loaded inside the component: ", questions);
+    // $: console.log("option selected----: ", optionSelected )
+    // $: console.log("current question ----: ", currentQuestion );
+    // $: console.log("choices: ", currentQuestion.choices)
+	$: correctAnswer = currentOptions.find((choice) => choice.isCorrect)?.label;
 
     onMount(() => {
         if(!$user_name) goto("/");
+        if(!$question_mode) goto("/");
         resetParameters();
+        console.log("lifelines inside the Question component: ", lifelines);
     })
 
 
@@ -72,7 +78,7 @@
     }
 
     const disabledAllOptions = () => {
-        disabledOptions = currentQuestion.choices.map((choice) => choice.label);
+        disabledOptions = currentOptions.map((choice) => choice.label);
     }
 
     const disabledAnOption = (option: []) => {
@@ -86,20 +92,6 @@
         message = "";
         showProceedButton = false;
         disabledOptions = [];
-        gameOver = false;
-    }
-
-    const useLifeline = (lifeline: LifelineName) => {
-        switch(lifeline) {
-            case LifelineName.FIFTY_FIFTY:
-                break;
-            case LifelineName.ASK_THE_AUDIENCE:
-                break;
-  
-            case LifelineName.SWITCH_QUESTION:
-                break;  
-        }
-        console.log("lifeline: ", getLifeline(lifeline));
     }
 </script>
 
@@ -107,20 +99,27 @@
     <h2 class="w-full sm:w-1/2 text-left text-md font-heading-bold text-white mb-3 sm:mb-0 w-fullmax-w-[300px]">
         Contestant: {$user_name}
     </h2>
-    <!-- <div class="w-full sm:w-1/2  flex flex-wrap justify-end gap-3">
+    <div class="w-full sm:w-1/2  flex flex-wrap justify-end gap-3">
         {#each lifelines as lifeline}
-            <Lifeline name={lifeline.name} icon={lifeline.icon} description={lifeline.description} on:use={useLifeline}/>
+            <Lifeline 
+                name={lifeline.name} 
+                icon={lifeline.icon} 
+                description={lifeline.description} 
+                type={lifeline.type}
+                disabled={lifeline.used}
+                on:use={(event) => console.log("lifeline used: ", event.detail)}
+            />
         {/each}
-    </div> -->
+    </div>
 </div>
 <h3>
 	<Hexagon style="w-full min-h-[150px] black-highlight cursor-default">
-        {@html currentQuestion?.question}
+        {@html currentQuestion}
     </Hexagon>
 </h3>
 
 <div>
-	{#each currentQuestion.choices as option, index}
+	{#each currentOptions as option, index}
 		<Option
 			optionLetter={letters[index]}
 			optionText={option.label}

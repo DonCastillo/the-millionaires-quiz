@@ -3,7 +3,7 @@
 	import Button from "$lib/components/container/Button.svelte";
 	import Hexagon from "$lib/components/container/Hexagon.svelte";
 	import { Mode } from "$lib/constants/mode.constants";
-	import { user_name } from "$lib/store/main";
+	import { user_name, question_mode } from "$lib/store/main";
 
 	console.log("This is the home page");
 	const TEXTFIELD_NAME = "Enter your name here";
@@ -23,6 +23,7 @@
 		if(!chosenMode) message += "Please choose a mode. <br />";
 		if(message) return;
 		$user_name = userName;
+		$question_mode = chosenMode;
 		goto(`/game/${chosenMode}`);
 	};
 

@@ -20,9 +20,8 @@
 		MoneyTreeNormal,
 		MoneyTreePigLatin,
 	} from "$lib/constants/money-tree.constants";
-	import type MoneyTreeInterface from "$lib/interfaces/moneytree.interface";
 	import type QuestionInterface from "$lib/interfaces/question.interface";
-	import { piglatin, piglatinizeQuestions } from "$lib/utils/piglatin";
+	import { piglatinizeQuestions } from "$lib/utils/piglatin";
 	import { goto } from "$app/navigation";
 	import { submitScore } from "$lib/utils/score-api";
 	import Loader from "$lib/components/loader/Loader.svelte";
@@ -34,8 +33,7 @@
 	let errorMessage: string = "";
 	$: numOfQuestionsPerDifficulty = $number_of_questions / 3;
 	$: mode = stringToMode(data?.mode);
-	$: $money_prices =
-		mode === Mode.PIGLATIN ? MoneyTreePigLatin : MoneyTreeNormal;
+	$: $money_prices = mode === Mode.PIGLATIN ? MoneyTreePigLatin : MoneyTreeNormal;
 	$: questionsPromise = $access_token
 		? [
 				getQuestions(
@@ -107,8 +105,6 @@
 			loadingText = "Loading questions...";
 			if(!$user_name) goto("/");
 
-			console.log("USER NAME: ", $user_name);
-			console.log("whole data:", data)
 			$user_cash_prize = 0;
 			$access_token = await getToken();
 
