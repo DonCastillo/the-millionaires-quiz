@@ -28,6 +28,7 @@
 
 
 	let questions: QuestionInterface[] = [];
+	let englishQuestions: QuestionInterface[] = [];
 	let loading: boolean = false;
 	let loadingText: string = "";
 	let errorMessage: string = "";
@@ -100,6 +101,8 @@
 	onMount(async () => {
 		try {
 			// get token
+			questions = [];
+			englishQuestions = [];
 			errorMessage = "";
 			loading = true;
 			loadingText = "Loading questions...";
@@ -116,6 +119,7 @@
 						...results[1],
 						...results[2],
 					]);
+				englishQuestions = questions;
 			}
 
 			if(!questions) goto("/")
@@ -143,12 +147,15 @@
 	<div class="flex flex-col sm:flex-row sm:items-center h-full">
 		<div class="sm:w-3/5 lg:w-2/3">
 			{#if questions && questions.length > 0}
-				<Question
-					{questions}
-					on:correct={correct}
-					on:incorrect={incorrect}
-					on:claimprize={claimPrize}
-				/>
+				<div>
+					<Question
+						{englishQuestions}
+						{questions}
+						on:correct={correct}
+						on:incorrect={incorrect}
+						on:claimprize={claimPrize}
+					/>
+				</div>
 			{/if}
 			{#if errorMessage}
 				<h3 class="font-heading-bold text-3xl mt-5 color-selected-2 text-center mb-10">

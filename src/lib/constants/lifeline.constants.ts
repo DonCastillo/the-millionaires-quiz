@@ -13,14 +13,14 @@ export const LifelineDefinitions: LifelineInterface[] = [
 		name: "50/50",
         type: LifelineName.FIFTY_FIFTY,
         icon: "fa-circle-half-stroke",
-        description: "Use this to removes two wrong answers from the options, giving you 50% chance of answering the question correctly.",
+        description: "Use this to remove two wrong answers from the options, giving you 50% chance of answering the question correctly.",
         disabled: false,
 	},
     {
 		name: "Ask the Audience",
         type: LifelineName.ASK_THE_AUDIENCE,
         icon: "fa-people-group",
-        description: "Ask the audience for their opinion. The highest rated answer will be shown to you.",
+        description: "Ask the audience for their opinion. The audience ratings will be shown to you. It is not guarantee though that the highest rated answer is the correct one since the audience can make mistake.",
         disabled: false,
 	},
     {

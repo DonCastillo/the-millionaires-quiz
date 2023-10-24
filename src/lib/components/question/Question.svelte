@@ -9,16 +9,16 @@
 	import Option from "./Option.svelte";
 	import { createEventDispatcher, onMount } from "svelte";
 	import Lifeline from '../container/Lifeline.svelte';
-	import { getLifeline } from '$lib/utils/type';
 	import { goto } from '$app/navigation';
 	import { Mode } from '$lib/constants/mode.constants.js';
-	import { getLifelines, useAskTheAudience, useAskThePig, useFiftyFifty } from '$lib/utils/lifeline';
+	import { getLifelines, useAskTheAudience, useAskThePig, useFiftyFifty, useUnpiglatinized } from '$lib/utils/lifeline';
 	import { LifelineName } from '$lib/constants/lifeline.constants';
-	import type ChoiceInterface from '$lib/interfaces/choice.interface';
+	import type LifelineInterface from '$lib/interfaces/lifeline.interface';
 	const dispatch = createEventDispatcher();
 	const letters = ["A", "B", "C", "D"];
 
 	export let questions: QuestionInterface[] = [];
+    export let englishQuestions: QuestionInterface[] = [];
 	let questionIndex: number = 0;
 	let optionSelected: string | null = null;
     let revealAnswer: boolean = false;
@@ -34,18 +34,13 @@
     $: console.log("current options: ", currentOptions);
     $: console.log("lifelines: ", lifelines);
 
-    // console.log("questions loaded inside the component: ", questions);
-    // $: console.log("option selected----: ", optionSelected )
-    // $: console.log("current question ----: ", currentQuestion );
-    // $: console.log("choices: ", currentQuestion.choices)
+
 	$: correctAnswer = currentOptions.find((choice) => choice.isCorrect)?.label;
-    $: correctAnswerPiglatinized = null;
 
     onMount(() => {
         if(!$user_name) goto("/");
         if(!$question_mode) goto("/");
         resetParameters();
-        // console.log("lifelines inside the Question component: ", lifelines);
     })
 
 
@@ -55,8 +50,6 @@
         showProceedButton = false;
         message = "";
         if(optionSelected === correctAnswer) {
-            // go to next question
-            // console.log($money_prices) 
             dispatch("correct", { questionIndex })
             message = "You are correct!";
             showProceedButton = true;
@@ -89,12 +82,8 @@
         })
     }
 
-    const disabledAnOption = (option: []) => {
-        disabledOptions = option;
-    }
-
     const disableLifeline = (lifeline: LifelineName) => {
-        lifelines = lifelines.map((l) => {
+        lifelines = lifelines.map((l: LifelineInterface) => {
             if(l.type === lifeline) {
                 return {...l, disabled: true}
             }
@@ -103,8 +92,6 @@
     }
 
     const useLifeline = (event: any) => {
-        console.log("+++++++++++")
-        console.log('Event: ', event.detail.type);
         switch(event.detail.type) {
             case LifelineName.FIFTY_FIFTY:
                 currentOptions = useFiftyFifty(currentOptions);
@@ -120,6 +107,11 @@
                         <p class="color-selected-2 text-4xl font-bold">${useAskThePig(correctAnswer)}</p>
                     ` : "";
                 disableLifeline(LifelineName.ASK_THE_PIG);
+                break;
+            case LifelineName.UNPIGLATINIZED:
+                console.log(currentQuestionObject)
+                currentQuestionObject = useUnpiglatinized(questionIndex, englishQuestions, currentOptions);
+                disableLifeline(LifelineName.UNPIGLATINIZED);
                 break;
         }
     }
