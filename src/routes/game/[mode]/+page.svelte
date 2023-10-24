@@ -20,22 +20,21 @@
 		MoneyTreeNormal,
 		MoneyTreePigLatin,
 	} from "$lib/constants/money-tree.constants";
-	import type MoneyTreeInterface from "$lib/interfaces/moneytree.interface";
 	import type QuestionInterface from "$lib/interfaces/question.interface";
-	import { piglatin, piglatinizeQuestions } from "$lib/utils/piglatin";
+	import { piglatinizeQuestions } from "$lib/utils/piglatin";
 	import { goto } from "$app/navigation";
 	import { submitScore } from "$lib/utils/score-api";
 	import Loader from "$lib/components/loader/Loader.svelte";
 
 
 	let questions: QuestionInterface[] = [];
+	let englishQuestions: QuestionInterface[] = [];
 	let loading: boolean = false;
 	let loadingText: string = "";
 	let errorMessage: string = "";
 	$: numOfQuestionsPerDifficulty = $number_of_questions / 3;
 	$: mode = stringToMode(data?.mode);
-	$: $money_prices =
-		mode === Mode.PIGLATIN ? MoneyTreePigLatin : MoneyTreeNormal;
+	$: $money_prices = mode === Mode.PIGLATIN ? MoneyTreePigLatin : MoneyTreeNormal;
 	$: questionsPromise = $access_token
 		? [
 				getQuestions(
@@ -102,13 +101,13 @@
 	onMount(async () => {
 		try {
 			// get token
+			questions = [];
+			englishQuestions = [];
 			errorMessage = "";
 			loading = true;
 			loadingText = "Loading questions...";
 			if(!$user_name) goto("/");
 
-			console.log("USER NAME: ", $user_name);
-			console.log("whole data:", data)
 			$user_cash_prize = 0;
 			$access_token = await getToken();
 
@@ -120,6 +119,7 @@
 						...results[1],
 						...results[2],
 					]);
+				englishQuestions = questions;
 			}
 
 			if(!questions) goto("/")
@@ -146,13 +146,16 @@
 <section class="container max-w-[1124px] p-5 mx-5 min-h-[500px]">
 	<div class="flex flex-col sm:flex-row sm:items-center h-full">
 		<div class="sm:w-3/5 lg:w-2/3">
-			{#if questions.length > 0}
-				<Question
-					{questions}
-					on:correct={correct}
-					on:incorrect={incorrect}
-					on:claimprize={claimPrize}
-				/>
+			{#if questions && questions.length > 0}
+				<div>
+					<Question
+						{englishQuestions}
+						{questions}
+						on:correct={correct}
+						on:incorrect={incorrect}
+						on:claimprize={claimPrize}
+					/>
+				</div>
 			{/if}
 			{#if errorMessage}
 				<h3 class="font-heading-bold text-3xl mt-5 color-selected-2 text-center mb-10">

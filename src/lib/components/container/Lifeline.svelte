@@ -13,19 +13,23 @@
 
     const clickHandler = () => {
         open = false;
+        console.log("inside lifeline component: ", )
         dispatch("use", { type })
         
     }
 </script>
 
 <button
-	class="black-highlight text-white flex flex-col justify-center items-center rounded-full border h-[40px] w-[40px] md:h-[60px] md:w-[60px] p-2"
+	class="relative black-highlight text-white flex flex-col justify-center items-center rounded-full border h-[40px] w-[40px] md:h-[60px] md:w-[60px] p-2"
 	title={name}
     disabled={disabled}
     on:click={() => open = true}
 >
 	<div class="mb-2">
 		<i class="fa-solid {icon} text-xl md:text-3xl flex items-center justify-center" />
+        {#if disabled}
+            <i class="fa-solid fa-xmark text-6xl absolute top-0 left-0 right-0 bottom-0 text-red-700"></i>
+        {/if}
 	</div>
 </button>
 

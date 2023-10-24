@@ -85,6 +85,8 @@ const getLifeline = (str: string) : LifelineName => {
         case 'fifty-fifty': return LifelineName.FIFTY_FIFTY;
         case 'ask-the-audience': return LifelineName.ASK_THE_AUDIENCE;
         case 'switch-question': return LifelineName.SWITCH_QUESTION;
+        case 'unpiglatinized': return LifelineName.UNPIGLATINIZED;
+        case 'ask-the-pig': return LifelineName.ASK_THE_PIG;
         default: return LifelineName.FIFTY_FIFTY;
     }
 }
