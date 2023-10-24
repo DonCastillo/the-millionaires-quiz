@@ -5,6 +5,7 @@ import {
 import { Mode } from "$lib/constants/mode.constants";
 import type ChoiceInterface from "$lib/interfaces/choice.interface";
 import type LifelineInterface from "$lib/interfaces/lifeline.interface";
+import { piglatin } from "./piglatin";
 import { getRandomNumberBetween, shuffleArray } from "./utils";
 const {
 	FIFTY_FIFTY,
@@ -13,6 +14,12 @@ const {
 	UNPIGLATINIZED,
 	ASK_THE_PIG,
 } = LifelineName;
+
+
+export const useAskThePig = (correctAnswer: string): string => {
+	return piglatin(correctAnswer);
+}
+
 
 export const useFiftyFifty = (choices: ChoiceInterface[]): ChoiceInterface[] => {
 	console.log("current option inside useFiftyFifty: ", choices)

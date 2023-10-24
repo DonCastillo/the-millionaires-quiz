@@ -142,7 +142,7 @@
 <section class="container max-w-[1124px] p-5 mx-5 min-h-[500px]">
 	<div class="flex flex-col sm:flex-row sm:items-center h-full">
 		<div class="sm:w-3/5 lg:w-2/3">
-			{#if questions.length > 0}
+			{#if questions && questions.length > 0}
 				<Question
 					{questions}
 					on:correct={correct}

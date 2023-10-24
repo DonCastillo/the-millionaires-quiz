@@ -12,7 +12,7 @@
 	import { getLifeline } from '$lib/utils/type';
 	import { goto } from '$app/navigation';
 	import { Mode } from '$lib/constants/mode.constants.js';
-	import { getLifelines, useAskTheAudience, useFiftyFifty } from '$lib/utils/lifeline';
+	import { getLifelines, useAskTheAudience, useAskThePig, useFiftyFifty } from '$lib/utils/lifeline';
 	import { LifelineName } from '$lib/constants/lifeline.constants';
 	import type ChoiceInterface from '$lib/interfaces/choice.interface';
 	const dispatch = createEventDispatcher();
@@ -25,7 +25,8 @@
     let message: string = "";
     let showProceedButton: boolean = false;
     let disabledOptions: string[] = [];
-    let lifelines = $question_mode ? getLifelines($question_mode) : getLifelines(Mode.NORMAL)
+    let lifelines = $question_mode ? getLifelines($question_mode) : getLifelines(Mode.NORMAL);
+    
 
 	$: currentQuestionObject = questions[questionIndex % questions.length];
     $: currentQuestion = currentQuestionObject?.question;
@@ -38,6 +39,7 @@
     // $: console.log("current question ----: ", currentQuestion );
     // $: console.log("choices: ", currentQuestion.choices)
 	$: correctAnswer = currentOptions.find((choice) => choice.isCorrect)?.label;
+    $: correctAnswerPiglatinized = null;
 
     onMount(() => {
         if(!$user_name) goto("/");
@@ -112,6 +114,13 @@
                 currentOptions = useAskTheAudience(currentOptions);
                 disableLifeline(LifelineName.ASK_THE_AUDIENCE);
                 break;
+            case LifelineName.ASK_THE_PIG:
+                message = correctAnswer ? `
+                        <p class="text-white text-xl font-bold mb-0">Correct Answer is</p>
+                        <p class="color-selected-2 text-4xl font-bold">${useAskThePig(correctAnswer)}</p>
+                    ` : "";
+                disableLifeline(LifelineName.ASK_THE_PIG);
+                break;
         }
     }
 
@@ -165,25 +174,44 @@
 
 {#if message}
     <div>
-        <h3 class="text-white text-center text-2xl font-heading-regular">{message}</h3>
+        <h3 class="text-white text-center text-2xl font-heading-regular">
+            {@html message}
+        </h3>
     </div>
 {/if}
 
 <div class="mt-10 px-10 flex flex-col sm:flex-row gap-3">
     {#if !$won_jackpot}
 
-        <Button buttonText="End game with <br>{formatCurrency($user_cash_prize)}" style="text-xl" on:click={claimPrize} />
+        <Button 
+            buttonText="End game with <br>{formatCurrency($user_cash_prize)}" 
+            style="text-xl" 
+            on:click={claimPrize} 
+        />
         
         {#if optionSelected && !revealAnswer }
-            <Button buttonText="Is that your final answer?" style="text-xl" on:click={finalizeAnswer} />
+            <Button 
+                buttonText="Is that your final answer?" 
+                style="text-xl" 
+                on:click={finalizeAnswer} 
+            />
         {/if}
+
         {#if showProceedButton}
-            <Button buttonText="Next Question" style="text-xl" on:click={nextQuestion} />
+            <Button 
+                buttonText="Next Question" 
+                style="text-xl" 
+                on:click={nextQuestion} 
+            />
         {/if}
 
     {:else}
 
-        <Button buttonText="Congratulations! You've won the jackpot prize of <br>{formatCurrency($user_cash_prize)}" style="text-xl" on:click={claimPrize} />
+        <Button 
+            buttonText="Congratulations! You've won the jackpot prize of <br>{formatCurrency($user_cash_prize)}" 
+            style="text-xl" 
+            on:click={claimPrize} 
+        />
 
     {/if}
 </div>
