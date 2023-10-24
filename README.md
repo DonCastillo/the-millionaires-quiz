@@ -1,38 +1,21 @@
-# create-svelte
+# The Millionaire's Quiz App
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+The Millionaire's Quiz App was inspired by the game show Who Wants to be a Millionaire. The app is built on the following stack and technology
 
-## Creating a project
+* Svelte Framework
+* Typescript
+* Tailwind CSS
+* MongoDB API (stores the user scores)
+* Open Trivia API (provides the questions)
+* PigLatin API (translates english to piglatin language)
+* Axios API (to make network requests)
+* Moment API (normalize date formatting)
 
-If you're seeing this, you've probably already done this step. Congrats!
+URL: https://the-millionaires-quiz.netlify.app/
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## Running the app locally
+`npm i` to install the packages and dependencies
+`npm run dev` to run in development mode
+`npm run dev -- --open` to start the server and open the app in a new browser tab
+`npm run build` to create a production version of your app
+`npm run preview` to preview the production build
